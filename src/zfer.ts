@@ -1,10 +1,11 @@
 #!/usr/bin/env node
 
 import { program, Option, Command } from 'commander';
-import fs, { readFile, readFileSync } from 'fs';
+import fs from 'fs';
 import path from 'path';
 const cwd = process.cwd();
 const PKG_NAME = 'package.json';
+import lint from './lint'
 
 const compose = (...fns: ((v: any) => any)[]) => (trigger: any) => {
   return fns.reduceRight((temp, fn) => {
@@ -14,7 +15,7 @@ const compose = (...fns: ((v: any) => any)[]) => (trigger: any) => {
 
 const toString = (binary: any) => binary.toString();
 const resolveCwd = (cwd: string) => (filename: string) => path.resolve(cwd, filename);
-const getPkgByFilename = compose(JSON.parse, toString, fs.readFileSync, resolveCwd);
+const getPkgByFilename = compose(JSON.parse, toString, fs.readFileSync, resolveCwd(cwd));
 const pkg = getPkgByFilename(PKG_NAME);
 
 const VERSION = pkg.version;
@@ -40,9 +41,16 @@ const zferBuild = new Command('build')
     console.log(option)
   });
 
+const zferLint = new Command('lint')
+  .description('lint')
+  .option('--ext <type...>', 'lint后缀')
+  .action((option: any) => {
+    console.log(option)
+    lint();
+  })
+
 registrySubCommand(program, zferDev);
 registrySubCommand(program, zferBuild);
+registrySubCommand(program, zferLint);
 
 program.parse(process.argv);
-
-const options = program.opts();
