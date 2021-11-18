@@ -6,12 +6,7 @@ import path from 'path';
 const cwd = process.cwd();
 const PKG_NAME = 'package.json';
 import lint from './lint'
-
-const compose = (...fns: ((v: any) => any)[]) => (trigger: any) => {
-  return fns.reduceRight((temp, fn) => {
-    return fn(temp);
-  }, trigger)
-}
+import { compose } from './utils';
 
 const toString = (binary: any) => binary.toString();
 const resolveCwd = (cwd: string) => (filename: string) => path.resolve(cwd, filename);
@@ -21,7 +16,7 @@ const pkg = getPkgByFilename(PKG_NAME);
 const VERSION = pkg.version;
 program
   .version(VERSION)
-  .option('-v, --version')
+  .option('-v, --version');
 
 const registrySubCommand = (program: Command, subCommand: Command) => {
   program.addCommand(subCommand);
@@ -31,7 +26,7 @@ const zferDev = new Command('dev')
   .description('start dev server')
   .option('-t, --typescript', '是否启用ts模式')
   .action((option: Option) => {
-    console.log(option)
+    console.log(option);
   });
 
 const zferBuild = new Command('build')
@@ -47,7 +42,7 @@ const zferLint = new Command('lint')
   .action((option: any) => {
     console.log(option)
     lint();
-  })
+  });
 
 registrySubCommand(program, zferDev);
 registrySubCommand(program, zferBuild);
