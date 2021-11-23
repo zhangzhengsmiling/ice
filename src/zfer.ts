@@ -38,10 +38,12 @@ const zferBuild = new Command('build')
 
 const zferLint = new Command('lint')
   .description('lint')
-  .option('--ext <type...>', 'lint后缀')
+  .option('--ext <string...>', 'lint后缀')
+  .option('-s, --suggestion')
+  .option('-f, --fix')
   .action((option: any) => {
-    console.log(option)
-    lint();
+    // console.log(option)
+    lint(option);
   });
 
 registrySubCommand(program, zferDev);

@@ -31,5 +31,5 @@ export const readAllFiles = (entry: string) => {
   }
   paths.push(entry);
   readFiles(entry);
-  return list;
+  return list.filter(item => !/.eslintrc/.test(item));
 }

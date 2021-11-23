@@ -5,24 +5,51 @@ import { displayLintMessage } from './logger/console'
 
 const { readAllFiles } = files;
 
-const lint = () => {
+interface IZferLintOption {
+  suggestion?: boolean;
+  fix?: boolean;
+}
+
+const verify = (lints: ESLint.LintResult[], suggestion: boolean = false) => {
+  lints.forEach(displayLintMessage({ showSuggestion: suggestion }))
+  console.log('\n')
+}
+
+const lint = async (option: IZferLintOption) => {
   // 读取src下所有的文件
+  const { suggestion, fix } = option;
   const files = readAllFiles(path.resolve(process.cwd(), 'src'))
   const lintFiles = files.map(file => {
     return path.join(process.cwd(), 'src', file)
   })
-  const lint = new ESLint();
+  const options = {
+    overrideConfigFile: path.join(process.cwd(), 'src/lint/.eslintrc.js'),
+    useEslintrc: false,
+    fix,
+  }
+  const lint = new ESLint(options);
+
+  const formatter = await lint.loadFormatter();
   const filesLint = lintFiles.map((lintFile) => {
     return lint.lintFiles(lintFile)
-  })
+  });
+
   Promise.all(filesLint)
     .then(resLints => {
-      resLints.forEach(lints => {
-        lints.forEach(displayLintMessage)
-        console.log('\n')
-      })
-    })
-}
-
+      resLints.forEach(async lints => {
+        if (!fix)
+          verify(lints, suggestion);
+        else {
+          await ESLint.outputFixes(lints)
+          const msg = formatter.format(lints)
+          console.log(msg);
+        }
+        // await ESLint.outputFixes(lints)
+        // const formatter = await lint.loadFormatter();
+        // const formatterText = await formatter.format(lints);
+        // console.log(formatterText);
+      });
+    });
+};
 
 export default lint;
