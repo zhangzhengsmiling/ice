@@ -14,18 +14,20 @@ interface IDisplayLintMessageOptions {
 export const displayLintMessage = (options: IDisplayLintMessageOptions) => (lintResult: ESLint.LintResult) => {
   const {
     showSuggestion = false
-  } = options
+  } = options;
   const maxCol = max(lintResult.messages.map(msg => msg.column));
   const maxLine = max(lintResult.messages.map(msg => msg.line));
   const displayRow = compose(chalk.gray, padStart(maxLine.toString().length, ' '), toString);
   const displayCol = compose(chalk.gray, padEnd(maxCol.toString().length, ' '), toString);
-  const displayServerity = compose(padEnd(17, ' '), mapServerityString)
+  const displayServerity = compose(padEnd(17, ' '), mapServerityString);
 
-  console.log(chalk.underline(lintResult.filePath))
+  if (lintResult.messages.length === 0) return;
+  console.log(chalk.underline(lintResult.filePath));
   lintResult.messages.forEach(msg => {
-    console.log(`${space(2)}${displayRow(msg.line)}${chalk.gray(':')}${displayCol(msg.column)}${space(3)}${displayServerity(msg.severity)}${space(3)}${chalk.gray(msg.messageId)}`)
+    console.log(`${space(2)}${displayRow(msg.line)}${chalk.gray(':')}${displayCol(msg.column)}${space(3)}${displayServerity(msg.severity)}${space(3)}${chalk.gray(msg.messageId)}`);
     if(showSuggestion && msg.suggestions) {
       displaySuggestions(msg);
     }
-  })
-}
+  });
+  console.log('\n');
+};

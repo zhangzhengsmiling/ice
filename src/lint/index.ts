@@ -1,7 +1,7 @@
 import path from 'path';
-import { ESLint } from 'eslint'
+import { ESLint } from 'eslint';
 import { files } from './utils';
-import { displayLintMessage } from './logger/console'
+import { displayLintMessage } from './logger/console';
 
 const { readAllFiles } = files;
 
@@ -10,28 +10,27 @@ interface IZferLintOption {
   fix?: boolean;
 }
 
-const verify = (lints: ESLint.LintResult[], suggestion: boolean = false) => {
-  lints.forEach(displayLintMessage({ showSuggestion: suggestion }))
-  console.log('\n')
-}
+const verify = (lints: ESLint.LintResult[], suggestion = false) => {
+  lints.forEach(displayLintMessage({ showSuggestion: suggestion }));
+};
 
 const lint = async (option: IZferLintOption) => {
   // 读取src下所有的文件
   const { suggestion, fix } = option;
-  const files = readAllFiles(path.resolve(process.cwd(), 'src'))
+  const files = readAllFiles(path.resolve(process.cwd(), 'src'));
   const lintFiles = files.map(file => {
-    return path.join(process.cwd(), 'src', file)
-  })
+    return path.join(process.cwd(), 'src', file);
+  });
   const options = {
     overrideConfigFile: path.join(process.cwd(), 'src/lint/.eslintrc.js'),
     useEslintrc: false,
     fix,
-  }
+  };
   const lint = new ESLint(options);
 
   const formatter = await lint.loadFormatter();
   const filesLint = lintFiles.map((lintFile) => {
-    return lint.lintFiles(lintFile)
+    return lint.lintFiles(lintFile);
   });
 
   Promise.all(filesLint)
@@ -40,14 +39,11 @@ const lint = async (option: IZferLintOption) => {
         if (!fix)
           verify(lints, suggestion);
         else {
-          await ESLint.outputFixes(lints)
-          const msg = formatter.format(lints)
-          console.log(msg);
+          await ESLint.outputFixes(lints);
+          const msg = formatter.format(lints);
+          if (msg)
+            console.log(msg);
         }
-        // await ESLint.outputFixes(lints)
-        // const formatter = await lint.loadFormatter();
-        // const formatterText = await formatter.format(lints);
-        // console.log(formatterText);
       });
     });
 };

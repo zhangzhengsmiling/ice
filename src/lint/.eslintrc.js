@@ -16,6 +16,9 @@ module.exports = {
         "@typescript-eslint"
     ],
     "rules": {
-      "semi": "error"
+      "semi": "error",
+      // 数组方法map,every,filter,some,find,findIndex等类似回调函数需要有return值
+      "array-callback-return": "warn",
+      //
     }
 };

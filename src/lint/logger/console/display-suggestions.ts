@@ -5,8 +5,8 @@ import { logger } from '../../utils';
 const { space } = logger;
 
 export const displaySuggestions = (msg: Linter.LintMessage) => {
-  console.log(`${space(2)}${chalk.green('suggestions:')}`)
+  console.log(`${space(2)}${chalk.green('suggestions:')}`);
   msg.suggestions?.forEach(suggest => {
-    console.log(chalk.green(`${space(4)}${suggest.messageId, suggest.desc}`))
-  })
-}
+    console.log(chalk.green(`${space(4)}${suggest.messageId, suggest.desc}`));
+  });
+};

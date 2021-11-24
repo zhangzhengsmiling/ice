@@ -9,4 +9,4 @@ export const mapServerityString = (serverity: number) => {
     default:
       return '';
   }
-}
+};
