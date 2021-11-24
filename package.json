@@ -19,7 +19,7 @@
   },
   "scripts": {
     "zfer": "ts-node src/zfer.ts",
-    "build": "tsc"
+    "build": "tsc && cp ./src/lint/.eslintrc.js ./es/lint/.eslintrc.js"
   },
   "bin": {
     "zfer": "es/zfer.js"
