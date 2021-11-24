@@ -20,6 +20,9 @@ const registrySubCommand = (program: Command, subCommand: Command) => {
   program.addCommand(subCommand);
 };
 
+const splitFilter = (splitStr: string) =>
+  (target: string) => target.split(splitStr).filter(Boolean);
+
 const zferDev = new Command('dev')
   .description('start dev server')
   .option('-t, --typescript', '是否启用ts模式')
@@ -37,20 +40,13 @@ const zferBuild = new Command('build')
     console.log(option);
   });
 
-interface IZferLintOptions {
-  ext?: string[];
-  suggestion?: boolean;
-  fix?: boolean;
-}
 const zferLint = new Command('lint')
-  .argument('<files...>', 'dir or file path list')
+  .argument('[files...]', 'dir or file path list')
   .description('lint')
-  .option('--ext <string...>', 'lint后缀')
+  .option('--ext <string>', 'lint后缀', splitFilter(','))
   .option('-s, --suggestion')
   .option('-f, --fix')
-  .action((args: string[], option: IZferLintOptions) => {
-    lint(args, option);
-  });
+  .action(lint);
 
 registrySubCommand(program, zferDev);
 registrySubCommand(program, zferBuild);
