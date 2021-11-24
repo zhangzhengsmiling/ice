@@ -43,13 +43,13 @@ interface IZferLintOptions {
   fix?: boolean;
 }
 const zferLint = new Command('lint')
+  .argument('<files...>', 'dir or file path list')
   .description('lint')
   .option('--ext <string...>', 'lint后缀')
   .option('-s, --suggestion')
   .option('-f, --fix')
-  .action((option: IZferLintOptions) => {
-    // console.log(option)
-    lint(option);
+  .action((args: string[], option: IZferLintOptions) => {
+    lint(args, option);
   });
 
 registrySubCommand(program, zferDev);

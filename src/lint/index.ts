@@ -3,7 +3,7 @@ import { ESLint } from 'eslint';
 import { files } from './utils';
 import { displayLintMessage } from './logger/console';
 
-const { readAllFiles } = files;
+const { readFilesOfDir } = files;
 
 interface IZferLintOption {
   suggestion?: boolean;
@@ -14,15 +14,37 @@ const verify = (lints: ESLint.LintResult[], suggestion = false) => {
   lints.forEach(displayLintMessage({ showSuggestion: suggestion }));
 };
 
-const lint = async (option: IZferLintOption) => {
-  // 读取src下所有的文件
+const dropPrefixPath = (prefix: string) => {
+  return (path: string) => {
+    return path.replace(prefix, '');
+  };
+};
+
+const resolvePrefix = (prefix: string) => {
+  return (_path: string) => {
+    return path.join(prefix, _path);
+  };
+};
+
+const combineArray = <T>(arr1: T[], arr2: T[]) => {
+  return [...arr1, ...arr2];
+};
+
+const lint = async (filePaths: string[], option: IZferLintOption) => {
+
+  const currentWorkPath = process.cwd();
   const { suggestion, fix } = option;
-  const files = readAllFiles(path.resolve(process.cwd(), 'src'));
-  const lintFiles = files.map(file => {
-    return path.join(process.cwd(), 'src', file);
-  });
+  
+  const lintFiles = filePaths
+    .map(resolvePrefix(currentWorkPath))
+    .map(readFilesOfDir)
+    .reduce(combineArray, [])
+    .map(dropPrefixPath(currentWorkPath))
+    .filter(path => !/.eslintrc/.test(path))
+    .map(resolvePrefix(currentWorkPath));
+
   const options = {
-    overrideConfigFile: path.join(process.cwd(), 'src/lint/.eslintrc.js'),
+    overrideConfigFile: path.join(__dirname, './.eslintrc.js'),
     useEslintrc: false,
     fix,
   };
