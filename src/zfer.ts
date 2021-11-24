@@ -3,14 +3,18 @@
 import { program, Option, Command } from 'commander';
 import fs from 'fs';
 import path from 'path';
-const cwd = process.cwd();
 const PKG_NAME = 'package.json';
 import lint from './lint';
 import { compose } from './utils';
 
 const toString = (buffer: Buffer) => buffer.toString();
 const resolveCwd = (cwd: string) => (filename: string) => path.resolve(cwd, filename);
-const getPkgByFilename = compose<string, {version: string}>(JSON.parse, toString, fs.readFileSync, resolveCwd(cwd));
+const getPkgByFilename = compose<string, {version: string}>(
+  JSON.parse,
+  toString,
+  fs.readFileSync,
+  resolveCwd(path.resolve(__dirname, '../'))
+);
 const pkg = getPkgByFilename(PKG_NAME);
 
 const VERSION = pkg.version;
