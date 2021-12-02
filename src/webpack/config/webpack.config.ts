@@ -23,7 +23,7 @@ interface INodeEnv {
   NODE_ENV: string;
 }
 
-enum EnumEnvironment {
+export enum EnumEnvironment {
   PRODUCTION = 'production',
   DEVELOPMENT = 'development',
 }
@@ -61,23 +61,6 @@ const mergeOutputConfig = (env: EnumEnvironment) => (outputConfig?: any) => {
   return outputConfig || DEFAULT_OUTPUT_CONFIG;
 };
 
-const ENV = getENV(process.env as any);
-
-const decratorKeyForList = (key: string) => {
-  return {
-    addKey: (list: any[]) => {
-      list.forEach((item, index) => {
-        item[key] = index;
-      });
-    },
-    removeKey: (list: any[]) => {
-      list.forEach((item) => {
-        delete item[key];
-      });
-    },
-  };
-};
-
 const getBundledFilename = (env: EnumEnvironment) => {
   switch (env) {
     case EnumEnvironment.DEVELOPMENT:
@@ -105,89 +88,117 @@ const getCssExtractFileName = (env: EnumEnvironment) => {
   }
 };
 
-const DOC_TITLE = 'title';
-const COPY_CONFIG: any[] = [];
-
 const addCopyConfig = (configs: any[], copyConfig: any) => {
   if (!fs.existsSync(path.resolve(copyConfig.from))) return;
   if (fs.readdirSync(copyConfig.from).length <= 0) return;
   configs.push(copyConfig)
 }
 
-addCopyConfig(COPY_CONFIG, {
-  from: path.resolve(cwd, 'public/imgs'),
-  to: path.resolve(cwd, 'build/imgs'),
-});
+const ENV = getENV(process.env as any);
 
-addCopyConfig(COPY_CONFIG, {
-  from: path.resolve(cwd, 'public/config'),
-  to: path.resolve(cwd, 'build/config'),
-});
+const getConfig = (ENV: EnumEnvironment) => {
+  const decratorKeyForList = (key: string) => {
+    return {
+      addKey: (list: any[]) => {
+        list.forEach((item, index) => {
+          item[key] = index;
+        });
+      },
+      removeKey: (list: any[]) => {
+        list.forEach((item) => {
+          delete item[key];
+        });
+      },
+    };
+  };
 
-const CONFIG_FILE_PATH = getConfigFilePath(ENV);
-const plugins = [
-  new CleanWebpackPlugin(),
-  new HtmlWebpackPlugin({
-    title: DOC_TITLE,
-    configPath: CONFIG_FILE_PATH,
-    template: path.resolve(cwd, './public/index.html'),
-    publicPath: '/',
-    filename: 'index.html',
-  }),
-  new MiniCssExtractPlugin({
-    filename: getCssExtractFileName(ENV),
-  }),
-]
+  const DOC_TITLE = 'title';
+  const COPY_CONFIG: any[] = [];
 
-if (COPY_CONFIG.length > 0) {
-  plugins.push(new CopyWebpackPlugin({
-    patterns: COPY_CONFIG,
-  }));
-}
+  addCopyConfig(COPY_CONFIG, {
+    from: path.resolve(cwd, 'public/imgs'),
+    to: path.resolve(cwd, 'build/imgs'),
+  });
 
-const config: any = {
-  entry: mergeEntryConfig(),
-  output: mergeOutputConfig(ENV)(),
-  plugins,
-  resolve: {
-    // ！important 动态配置，不必要的后缀配置不要加，出现频率高的后缀往前提
-    extensions: ['.ts', '.tsx', '.js', 'jsx', '.less', '.json', '.scss', '.sass'],
-    alias: {
-      '@': path.resolve(cwd, './src'),
+  addCopyConfig(COPY_CONFIG, {
+    from: path.resolve(cwd, 'public/config'),
+    to: path.resolve(cwd, 'build/config'),
+  });
+
+  const CONFIG_FILE_PATH = getConfigFilePath(ENV);
+  const plugins = [
+    new CleanWebpackPlugin(),
+    new HtmlWebpackPlugin({
+      title: DOC_TITLE,
+      configPath: CONFIG_FILE_PATH,
+      template: path.resolve(cwd, './public/index.html'),
+      publicPath: '/',
+      filename: 'index.html',
+    }),
+    new MiniCssExtractPlugin({
+      filename: getCssExtractFileName(ENV),
+    }),
+  ]
+
+  if (COPY_CONFIG.length > 0) {
+    plugins.push(new CopyWebpackPlugin({
+      patterns: COPY_CONFIG,
+    }));
+  }
+
+  const config: any = {
+    entry: mergeEntryConfig(),
+    output: mergeOutputConfig(ENV)(),
+    plugins,
+    resolve: {
+      // ！important 动态配置，不必要的后缀配置不要加，出现频率高的后缀往前提
+      extensions: ['.ts', '.tsx', '.js', 'jsx', '.less', '.json', '.scss', '.sass'],
+      alias: {
+        '@': path.resolve(cwd, './src'),
+      },
     },
-  },
-  module: {
-    rules: [
-      LOADER_JS,
-      LOADER_TS,
-      LOADER_LESS_MODULE,
-      LOADER_LESS,
-      LOADER_SASS,
-      LOADER_SASS_MODULE,
-      LOADER_IMG,
-      LOADER_FONT,
-    ],
-  },
-  stats: 'minimal',
-  optimization: {
-    minimizer: [new TerserWebpackPlugin(), new CssMinimizerWebpackPlugin()],
-  },
-};
+    module: {
+      rules: [
+        LOADER_JS,
+        LOADER_TS,
+        LOADER_LESS_MODULE,
+        LOADER_LESS,
+        LOADER_SASS,
+        LOADER_SASS_MODULE,
+        LOADER_IMG,
+        LOADER_FONT,
+      ],
+    },
+    stats: 'minimal',
+    optimization: {
+      minimizer: [new TerserWebpackPlugin(), new CssMinimizerWebpackPlugin()],
+    },
+  };
 
-if (ENV === EnumEnvironment.DEVELOPMENT) {
-  (config as any).devServer = mergeDevServerConfig();
+  if (ENV === EnumEnvironment.DEVELOPMENT) {
+    (config as any).devServer = mergeDevServerConfig({
+      client: {
+        overlay: {
+          errors: true,
+          warnings: false,
+        },
+        progress: true,
+      }
+    });
+  }
+
+  const { addKey, removeKey } = decratorKeyForList('_key');
+
+  // merge config
+  let _config = null;
+  if (typeof customConfig === 'object') {
+    _config = merge({}, config, customConfig);
+  } else if (typeof customConfig === 'function') {
+    addKey(config.module.rules);
+    _config = (customConfig as any)(config, { env: process.env });
+    removeKey(config.module.rules);
+    return _config;
+  }
 }
 
-const { addKey, removeKey } = decratorKeyForList('_key');
-
-// merge config
-let _config = null;
-if (typeof customConfig === 'object') {
-  _config = merge({}, config, customConfig);
-} else if (typeof customConfig === 'function') {
-  addKey(config.module.rules);
-  _config = (customConfig as any)(config, { env: process.env });
-  removeKey(config.module.rules);
-}
-
-export default _config as any;
+export default getConfig as any;
