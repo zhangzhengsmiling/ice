@@ -2,3 +2,6 @@ package-lock*
 *node_modules/*
 es/*
 *-error.*
+public/*
+build/*
+src/index.tsx

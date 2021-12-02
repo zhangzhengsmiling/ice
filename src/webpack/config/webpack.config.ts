@@ -1,4 +1,5 @@
 import path from 'path';
+import fs from 'fs';
 import HtmlWebpackPlugin from 'html-webpack-plugin';
 import { CleanWebpackPlugin } from 'clean-webpack-plugin';
 import LOADER_JS from './loaders/js-loader';
@@ -105,37 +106,49 @@ const getCssExtractFileName = (env: EnumEnvironment) => {
 };
 
 const DOC_TITLE = 'title';
-const COPY_CONFIG = [
-  {
-    from: path.resolve(cwd, 'public/imgs'),
-    to: path.resolve(cwd, 'build/imgs'),
-  },
-  {
-    from: path.resolve(cwd, 'public/config'),
-    to: path.resolve(cwd, 'build/config'),
-  },
-];
+const COPY_CONFIG: any[] = [];
+
+const addCopyConfig = (configs: any[], copyConfig: any) => {
+  if (!fs.existsSync(path.resolve(copyConfig.from))) return;
+  if (fs.readdirSync(copyConfig.from).length <= 0) return;
+  configs.push(copyConfig)
+}
+
+addCopyConfig(COPY_CONFIG, {
+  from: path.resolve(cwd, 'public/imgs'),
+  to: path.resolve(cwd, 'build/imgs'),
+});
+
+addCopyConfig(COPY_CONFIG, {
+  from: path.resolve(cwd, 'public/config'),
+  to: path.resolve(cwd, 'build/config'),
+});
+
 const CONFIG_FILE_PATH = getConfigFilePath(ENV);
+const plugins = [
+  new CleanWebpackPlugin(),
+  new HtmlWebpackPlugin({
+    title: DOC_TITLE,
+    configPath: CONFIG_FILE_PATH,
+    template: path.resolve(cwd, './public/index.html'),
+    publicPath: '/',
+    filename: 'index.html',
+  }),
+  new MiniCssExtractPlugin({
+    filename: getCssExtractFileName(ENV),
+  }),
+]
+
+if (COPY_CONFIG.length > 0) {
+  plugins.push(new CopyWebpackPlugin({
+    patterns: COPY_CONFIG,
+  }));
+}
 
 const config: any = {
   entry: mergeEntryConfig(),
   output: mergeOutputConfig(ENV)(),
-  plugins: [
-    new CleanWebpackPlugin(),
-    new CopyWebpackPlugin({
-      patterns: COPY_CONFIG,
-    }),
-    new HtmlWebpackPlugin({
-      title: DOC_TITLE,
-      configPath: CONFIG_FILE_PATH,
-      template: path.resolve(cwd, './public/index.html'),
-      publicPath: '/',
-      filename: 'index.html',
-    }),
-    new MiniCssExtractPlugin({
-      filename: getCssExtractFileName(ENV),
-    }),
-  ],
+  plugins,
   resolve: {
     // ！important 动态配置，不必要的后缀配置不要加，出现频率高的后缀往前提
     extensions: ['.ts', '.tsx', '.js', 'jsx', '.less', '.json', '.scss', '.sass'],
