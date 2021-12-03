@@ -91,8 +91,8 @@ const getCssExtractFileName = (env: EnumEnvironment) => {
 const addCopyConfig = (configs: any[], copyConfig: any) => {
   if (!fs.existsSync(path.resolve(copyConfig.from))) return;
   if (fs.readdirSync(copyConfig.from).length <= 0) return;
-  configs.push(copyConfig)
-}
+  configs.push(copyConfig);
+};
 
 const ENV = getENV(process.env as any);
 
@@ -138,7 +138,7 @@ const getConfig = (ENV: EnumEnvironment) => {
     new MiniCssExtractPlugin({
       filename: getCssExtractFileName(ENV),
     }),
-  ]
+  ];
 
   if (COPY_CONFIG.length > 0) {
     plugins.push(new CopyWebpackPlugin({
@@ -199,6 +199,6 @@ const getConfig = (ENV: EnumEnvironment) => {
     removeKey(config.module.rules);
     return _config;
   }
-}
+};
 
 export default getConfig as any;

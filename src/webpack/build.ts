@@ -1,6 +1,6 @@
 import webpack from 'webpack';
 import chalk from 'chalk';
-import getConfig, { EnumEnvironment } from './config/webpack.config'
+import getConfig, { EnumEnvironment } from './config/webpack.config';
 const MODE = EnumEnvironment.PRODUCTION;
 const config = getConfig(MODE);
 config.mode = MODE;
@@ -15,15 +15,15 @@ const build = () => {
         return {
           name: file,
           size: stats.compilation.assets[file]._size
-        }
-      })
+        };
+      });
 
     assets.forEach(item => {
       console.log(`${item.name}    ${chalk.yellow(item.size + ' Bytes')}`);
-    })
-    console.log('buidld successfully!!')
-    console.log(chalk.yellow('building process costs ' + (stats.endTime - stats.startTime) + 'ms'))
+    });
+    console.log('buidld successfully!!');
+    console.log(chalk.yellow('building process costs ' + (stats.endTime - stats.startTime) + 'ms'));
   });
-}
+};
 
 export default build;

@@ -37,9 +37,9 @@ const ofExtensions = (extensions: string[]) => {
     if (extensions.length === 0) return true;
     return extensions.some(ext => {
       return new RegExp(ext + '$').test(path);
-    })
-  }
-}
+    });
+  };
+};
 
 const lint = async (filePaths: string[], option: IZferLintOption) => {
   if(filePaths.length === 0) return console.log(chalk.yellow('do nothing!!'));
