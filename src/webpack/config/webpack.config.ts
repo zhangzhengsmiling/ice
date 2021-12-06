@@ -12,27 +12,14 @@ import { MiniCssExtractPlugin } from './plugins/plugin-mini-css-extract';
 import CopyWebpackPlugin from 'copy-webpack-plugin';
 const cwd = process.cwd();
 import { Configuration as DevServerConfiguration } from 'webpack-dev-server';
-import customConfig from './custom.webpack.config';
 import merge from 'webpack-merge';
 import CssMinimizerWebpackPlugin from 'css-minimizer-webpack-plugin';
 import TerserWebpackPlugin from 'terser-webpack-plugin';
-
-// import SpeedMesuarePlugin from 'speed-measure-webpack-plugin';
-// const smp = new SpeedMesuarePlugin();
-interface INodeEnv {
-  NODE_ENV: string;
-}
 
 export enum EnumEnvironment {
   PRODUCTION = 'production',
   DEVELOPMENT = 'development',
 }
-
-const getENV = (environment: INodeEnv): EnumEnvironment => {
-  const DEFAULT_ENV = EnumEnvironment.PRODUCTION;
-  if (environment.NODE_ENV === undefined) return DEFAULT_ENV;
-  return environment.NODE_ENV as EnumEnvironment;
-};
 
 const mergeDevServerConfig = (
   devServerConfig: DevServerConfiguration = {},
@@ -94,9 +81,7 @@ const addCopyConfig = (configs: any[], copyConfig: any) => {
   configs.push(copyConfig);
 };
 
-const ENV = getENV(process.env as any);
-
-const getConfig = (ENV: EnumEnvironment) => {
+const getConfig = async (ENV: EnumEnvironment) => {
   const decratorKeyForList = (key: string) => {
     return {
       addKey: (list: any[]) => {
@@ -189,10 +174,16 @@ const getConfig = (ENV: EnumEnvironment) => {
 
   const { addKey, removeKey } = decratorKeyForList('_key');
 
+  const customConfig = await import(
+    path.resolve(process.cwd(),
+    'zfer.config.js')
+  ).then(module => module.default);
+
   // merge config
   let _config = null;
   if (typeof customConfig === 'object') {
     _config = merge({}, config, customConfig);
+    return _config;
   } else if (typeof customConfig === 'function') {
     addKey(config.module.rules);
     _config = (customConfig as any)(config, { env: process.env });
