@@ -6,6 +6,8 @@ import path from 'path';
 const PKG_NAME = 'package.json';
 import lint from './lint';
 import { compose } from './utils';
+import start from './webpack/dev';
+import build from './webpack/build';
 
 const toString = (buffer: Buffer) => buffer.toString();
 const resolveCwd = (cwd: string) => (filename: string) => path.resolve(cwd, filename);
@@ -32,6 +34,7 @@ const zferDev = new Command('dev')
   .option('-t, --typescript', '是否启用ts模式')
   .action((option: Option) => {
     console.log(option);
+    start();
   });
 
 interface IZferBuildOptions {
@@ -42,6 +45,7 @@ const zferBuild = new Command('build')
   .option('-t, --typescript', '是否启用ts模式')
   .action((option: IZferBuildOptions) => {
     console.log(option);
+    build();
   });
 
 const zferLint = new Command('lint')
