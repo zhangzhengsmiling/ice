@@ -1,5 +1,5 @@
-export const curry = <RetType>(fn: Function, ...curryArgs: any[]) => {
-  return (...args: any[]): RetType => {
-    return fn(curryArgs, args);
+export const curry = <RetType>(fn: (...args: unknown[]) => unknown, ...curryArgs: unknown[]) => {
+  return (...args: unknown[]): RetType => {
+    return fn(curryArgs, args) as RetType;
   };
 };

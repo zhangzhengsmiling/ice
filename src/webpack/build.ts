@@ -6,16 +6,17 @@ const MODE = EnumEnvironment.PRODUCTION;
 const build = async () => {
   const config = await getConfig(MODE);
   config.mode = MODE;
-  const compilation = webpack(config as any);
-  compilation.run((err: any, stats: any) => {
+  const compilation = webpack(config as webpack.Configuration);
+  compilation.run((err?: Error, stats?: webpack.Stats) => {
     if(err) throw err;
+    if (!stats) return;
     if(stats.compilation.errors.length > 0)
       throw stats.compilation.errors[0];
     const assets = Object.keys(stats.compilation.assets)
       .map((file: string) => {
         return {
           name: file,
-          size: stats.compilation.assets[file]._size
+          size: stats.compilation.assets[file].size(),
         };
       });
 
