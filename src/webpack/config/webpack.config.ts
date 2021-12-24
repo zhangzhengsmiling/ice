@@ -183,7 +183,7 @@ const getConfig = async (ENV: EnumEnvironment) => {
 
   const customConfig = await import(
     path.resolve(process.cwd(),
-    'zfer.config.js')
+    'ice.config.js')
   ).then(module => module.default);
 
   // merge config

@@ -1,5 +1,5 @@
 {
-  "name": "zfer",
+  "name": "@ice-age/ice",
   "version": "1.0.0",
   "main": "index.js",
   "license": "MIT",
@@ -43,10 +43,10 @@
     "eslint": "^8.2.0"
   },
   "scripts": {
-    "zfer": "ts-node src/zfer.ts",
+    "ice": "ts-node src/ice.ts",
     "build": "tsc && cp ./src/lint/.eslintrc.js ./es/lint/.eslintrc.js"
   },
   "bin": {
-    "zfer": "es/zfer.js"
+    "ice": "es/ice.js"
   }
 }

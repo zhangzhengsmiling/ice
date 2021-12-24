@@ -29,15 +29,15 @@ const registrySubCommand = (program: Command, subCommand: Command) => {
 const splitFilter = (splitStr: string) =>
   (target: string) => target.split(splitStr).filter(Boolean);
 
-const zferDev = new Command('dev')
+const devCommand = new Command('dev')
   .description('start dev server')
   .action(start);
 
-const zferBuild = new Command('build')
+const buildCommand = new Command('build')
   .description('build')
   .action(build);
 
-const zferLint = new Command('lint')
+const lintCommand = new Command('lint')
   .argument('[files...]', 'dir or file path list')
   .description('lint')
   .option('--ext <string>', 'lint后缀', splitFilter(','))
@@ -45,8 +45,8 @@ const zferLint = new Command('lint')
   .option('-f, --fix')
   .action(lint);
 
-registrySubCommand(program, zferDev);
-registrySubCommand(program, zferBuild);
-registrySubCommand(program, zferLint);
+registrySubCommand(program, devCommand);
+registrySubCommand(program, buildCommand);
+registrySubCommand(program, lintCommand);
 
 program.parse(process.argv);
