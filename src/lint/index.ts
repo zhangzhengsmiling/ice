@@ -6,7 +6,7 @@ import chalk from 'chalk';
 
 const { readFilesOfDir } = files;
 
-interface IZferLintOption {
+interface IIceLintOption {
   suggestion?: boolean;
   fix?: boolean;
   ext?: string[];
@@ -41,7 +41,7 @@ const ofExtensions = (extensions: string[]) => {
   };
 };
 
-const lint = async (filePaths: string[], option: IZferLintOption) => {
+const lint = async (filePaths: string[], option: IIceLintOption) => {
   if(filePaths.length === 0) return console.log(chalk.yellow('do nothing!!'));
   const currentWorkPath = process.cwd();
   const { suggestion, fix, ext = [] } = option;
