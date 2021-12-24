@@ -31,22 +31,11 @@ const splitFilter = (splitStr: string) =>
 
 const zferDev = new Command('dev')
   .description('start dev server')
-  .option('-t, --typescript', '是否启用ts模式')
-  .action((option: Option) => {
-    console.log(option);
-    start();
-  });
+  .action(start);
 
-interface IZferBuildOptions {
-  typesctipt?: boolean
-}
 const zferBuild = new Command('build')
   .description('build')
-  .option('-t, --typescript', '是否启用ts模式')
-  .action((option: IZferBuildOptions) => {
-    console.log(option);
-    build();
-  });
+  .action(build);
 
 const zferLint = new Command('lint')
   .argument('[files...]', 'dir or file path list')
