@@ -1,19 +1,25 @@
 {
   "name": "@ice-age/ice",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "main": "index.js",
   "license": "MIT",
   "devDependencies": {
-    "@babel/core": "^7.16.0",
-    "@babel/preset-env": "^7.16.4",
-    "@babel/preset-react": "^7.16.0",
-    "@babel/preset-typescript": "^7.16.0",
     "@types/commander": "^2.12.2",
     "@types/copy-webpack-plugin": "^8.0.1",
     "@types/eslint": "^8.2.0",
     "@types/mini-css-extract-plugin": "^2.4.0",
     "@types/node": "^16.11.7",
-    "@types/webpack-dev-server": "^4.5.0",
+    "@types/webpack-dev-server": "^4.5.0"
+  },
+  "dependencies": {
+    "@typescript-eslint/parser": "^5.4.0",
+    "chalk": "^4.1.2",
+    "commander": "^8.3.0",
+    "eslint": "^8.2.0",
+    "@babel/core": "^7.16.0",
+    "@babel/preset-env": "^7.16.4",
+    "@babel/preset-react": "^7.16.0",
+    "@babel/preset-typescript": "^7.16.0",
     "@typescript-eslint/eslint-plugin": "^5.4.0",
     "babel-loader": "^8.2.3",
     "cache-loader": "^4.1.0",
@@ -35,12 +41,6 @@
     "webpack": "^5.64.4",
     "webpack-dev-server": "^4.6.0",
     "webpack-merge": "^5.8.0"
-  },
-  "dependencies": {
-    "@typescript-eslint/parser": "^5.4.0",
-    "chalk": "^4.1.2",
-    "commander": "^8.3.0",
-    "eslint": "^8.2.0"
   },
   "scripts": {
     "ice": "ts-node src/ice.ts",
