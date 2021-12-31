@@ -3,6 +3,12 @@
   "version": "1.0.3",
   "main": "index.js",
   "license": "MIT",
+  "description": "A dev tools based on webpack for front end project",
+  "author": {
+    "name": "zhangzhengsmiling",
+    "email": "zhangzhensmiling@163.com",
+    "url": "https://github.com/zhangzhengsmiling"
+  },
   "devDependencies": {
     "@types/commander": "^2.12.2",
     "@types/copy-webpack-plugin": "^8.0.1",
