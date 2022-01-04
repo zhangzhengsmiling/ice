@@ -14,7 +14,7 @@ It is useful when you are going to create a demo project.I do not want to create
 
 ## HOW TO START
 
-1. You can install `ice` global or local
+1. You can install `ice` globally or locally
 
    Maybe there are some problems in global installing, you could try install locally
 
@@ -80,9 +80,9 @@ It is useful when you are going to create a demo project.I do not want to create
    }
    ```
 
-## ## SCRIPTS
+## SCRIPTS
 
-Here are some scripts that has been integrated to `ice`. You can use the following scripts when you have installed `ice`. Here are some scripts listed briefly(Of Cource, you can run script `ice --help` to get detailed information.):
+Here are some scripts that has been integrated to `ice`. You can use the following scripts when you have installed `ice`. Here are some scripts listed briefly(Of course, you can run script `ice --help` to get detailed information.):
 
 ### ice dev
 
@@ -90,7 +90,7 @@ Start project just like `create-react-app`.It will start webpack dev server.It e
 
 ### ice build
 
-A script to build you project. You can write your own config files in `ice.config.js` to custimize your own process of building.
+A script to build you project. You can write your own config files in `ice.config.js` to customize your own process of building.
 
 ### ice lint <directory> [options]
 
