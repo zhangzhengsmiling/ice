@@ -61,7 +61,7 @@
   "scripts": {
     "ice": "ts-node src/ice.ts",
     "build": "tsc && cp ./src/lint/.eslintrc.js ./es/lint/.eslintrc.js",
-    "release": "yarn standard-version"
+    "release": "standard-version"
   },
   "bin": {
     "ice": "es/ice.js"
