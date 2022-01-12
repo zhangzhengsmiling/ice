@@ -10,7 +10,7 @@ This is a package to help developers to run a react project.It is an encapsulati
 
 ### WHY DO I WRITE THIS PACKAGE?
 
-It is useful when you are going to create a demo project.I do not want to create `webpack.config.js` and install depencies again and again. So, I just write this package to encapsulate some base packages to `ice`, just use for build project.
+It is useful when you are going to create a demo project.I do not want to create `webpack.config.js` and install dependencies again and again. So, I just write this package to encapsulate some base packages to `ice`, just used for building project.
 
 ## HOW TO START
 
