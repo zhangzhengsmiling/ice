@@ -61,7 +61,8 @@
   "scripts": {
     "ice": "ts-node src/ice.ts",
     "build": "tsc && cp ./src/lint/.eslintrc.js ./es/lint/.eslintrc.js",
-    "release": "standard-version"
+    "release": "standard-version",
+    "lint": "ts-node src/ice.ts lint src --ext .ts --fix"
   },
   "bin": {
     "ice": "es/ice.js"
@@ -73,7 +74,8 @@
   },
   "husky": {
     "hooks": {
-      "commit-msg": "commitlint -e $GIT_PARAMS"
+      "commit-msg": "commitlint -e $GIT_PARAMS",
+      "pre-commit": "yarn lint"
     }
   }
 }
