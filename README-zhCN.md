@@ -2,7 +2,7 @@
 
 <a href="https://www.npmjs.com/package/@ice-age/ice"><img alt="NPM Status" src="https://img.shields.io/npm/v/@ice-age/ice.svg?style=flat"></a>
 
-ENGLISH | [简体中文](./README-zhCN.md)
+[ENGLISH](./README.md) | 简体中文
 
 ## INTRODUCTION
 
