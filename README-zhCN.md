@@ -4,29 +4,29 @@
 
 [ENGLISH](./README.md) | 简体中文
 
-## INTRODUCTION
+## 简介
 
-### BASE
+### 基本介绍
 
-This is a package to help developers to run a react project.It is an encapsulation of webpack, so you can do anything that webpack can do by rewriting `ice.config.js`
+`ice`是对于webpack进行的一个二次封装，用于帮助开发者快速运行react项目。ice会暴露出`ice.config.js`文件，在里面可以暴露一个函数或者对象，对于预设的webpack配置进行覆盖。
 
-`ATTENTION`: However, there are lots of things to be improved, so you'd better not to apply this package to production. You can use this package just for fun. Of course, welcome to try this package, and give some tips to me for improving!
+`注意点`: 这个库很多地方都并不是特别完善，所以千万不要用于生产环境或者实际项目中。当然，如果您在使用的过程中存在一些BUG，也欢迎给我提issue或者建议，帮助我一点一点完善。
 
-### WHY DO I WRITE THIS PACKAGE?
+### 为什么我要写这个？
 
-It is useful when you are going to create a demo project.I do not want to create `webpack.config.js` and install dependencies again and again. So, I just write this package to encapsulate some base packages to `ice`, just used for building project.
+我在平常写demo的时候可能用不到create-react-app中的很多功能，所以需要配置自己的项目。很多时候就需要从创建`webpack.config.js`开始，这是一个不断重复的过程。所以，对于我来说，就想把webpack的一些配置封装起来，用于构建项目。另一方面就是加强自己对于webpack配置的一个理解吧。
 
-## HOW TO START
+## 如何启动项目
 
-1. You can install `ice` globally or locally
-
-   Maybe there are some problems in global installing, you could try install locally
+1. 你可以在全局或者项目目录中安装`ice`
 
    ```shell
-   yarn global add @ice-age/ice or yarn add @ice-age/ice -D
+   yarn global add @ice-age/ice
+   or
+   yarn add @ice-age/ice -D
    ```
 
-2. ensure your directory structure, here is a base structure to make sure you can run by `ice`.
+2. 确保你的项目结构与下面目录结构一致
 
    ```shell
    $ tree .
@@ -40,11 +40,11 @@ It is useful when you are going to create a demo project.I do not want to create
    └── yarn.lock
    ```
 
-   Of Course, you can rewrite `ice.config.js` to customize to fit your project.(You may receive a mistake if you forget `ice.config.js` in current version)
+   ，当然不一致的话，也可以重写`ice.config.js`文件去适配项目。(在当前版本下`ice.config.js`是必须的，不然会报错，这个BUG后面再做优化)。
 
-3. Now you can run with `ice dev` or `yarn ice dev` to run your application
+3. 当你的目录结构ok以后，就可以尝试运行`yarn ice dev`或者`ice dev`，来启动项目。
 
-4. Here are some files for example:
+4. 下面是一些文件示例：
 
    ```html
    <!-- publis/index.html -->
@@ -86,18 +86,17 @@ It is useful when you are going to create a demo project.I do not want to create
 
 ## SCRIPTS
 
-Here are some scripts that has been integrated to `ice`. You can use the following scripts when you have installed `ice`. Here are some scripts listed briefly(Of course, you can run script `ice --help` to get detailed information.):
+下面是一些可运行的脚本
 
 ### ice dev
 
-Start project just like `create-react-app`.It will start webpack dev server.It equals to running script ` webpack serve`. You can also run `tsc --watch` to start type checking.
+启动webpack dev server。类似于`webpack serve`, 内部用的是babel-loader编译ts代码，因此可能不会进行类型检查报错，你可以尝试通过`tsc --watch`进行类型检查。
 
 ### ice build
 
-A script to build you project. You can write your own config files in `ice.config.js` to customize your own process of building.
+项目构建脚本
 
 ### ice lint <directory> [options]
 
-Lint script, it can be used just like `eslint`, and it encapsulates some eslint config.
-
-You can run eslint by script, `ice lint src --ext .tsx,ts`.Besides you can get more details by running `ice lint --help`.
+与eslint类似，对于一些eslint的配置进行封装
+你可以尝试运行`ice lint src --ext .tsx,.ts`进行lint校验

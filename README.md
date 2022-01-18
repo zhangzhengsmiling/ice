@@ -100,4 +100,4 @@ A script to build you project. You can write your own config files in `ice.confi
 
 Lint script, it can be used just like `eslint`, and it encapsulates some eslint config.
 
-You can run eslint by script, `ice lint src --ext .tsx,ts`.Besides you can get more details by running `ice lint --help`.
+You can run eslint by script, `ice lint src --ext .tsx,.ts`.Besides you can get more details by running `ice lint --help`.
