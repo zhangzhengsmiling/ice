@@ -1,6 +1,10 @@
 # ICE
 
-## INTRODUCE
+<a href="https://www.npmjs.com/package/@ice-age/ice"><img alt="NPM Status" src="https://img.shields.io/npm/v/@ice-age/ice.svg?style=flat"></a>
+
+ENGLISH | [简体中文](./README-zhCN.md)
+
+## INTRODUCTION
 
 ### BASE
 
@@ -96,4 +100,4 @@ A script to build you project. You can write your own config files in `ice.confi
 
 Lint script, it can be used just like `eslint`, and it encapsulates some eslint config.
 
-You can run eslint by script, `ice lint src --ext .tsx,ts`.Besides you can get more details by running `ice lint --help`.
+You can run eslint by script, `ice lint src --ext .tsx,.ts`.Besides you can get more details by running `ice lint --help`.
