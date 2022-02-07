@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-import { program, Option, Command } from 'commander';
+import { program, Command } from 'commander';
 import fs from 'fs';
 import path from 'path';
 const PKG_NAME = 'package.json';
@@ -8,6 +8,7 @@ import lint from './lint';
 import { compose } from './utils';
 import start from './webpack/dev';
 import build from './webpack/build';
+import init from './init'
 
 const toString = (buffer: Buffer) => buffer.toString();
 const resolveCwd = (cwd: string) => (filename: string) => path.resolve(cwd, filename);
@@ -45,8 +46,13 @@ const lintCommand = new Command('lint')
   .option('-f, --fix')
   .action(lint);
 
+const initCommand = new Command('init')
+  .argument('name', 'name of project')
+  .action(init)
+
 registrySubCommand(program, devCommand);
 registrySubCommand(program, buildCommand);
 registrySubCommand(program, lintCommand);
+registrySubCommand(program, initCommand);
 
 program.parse(process.argv);
