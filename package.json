@@ -1,6 +1,6 @@
 {
   "name": "@ice-age/ice",
-  "version": "1.0.5",
+  "version": "2.1.2-beta.0",
   "main": "index.js",
   "license": "MIT",
   "description": "A dev tools based on webpack for front end project",
@@ -61,8 +61,13 @@
   "scripts": {
     "ice": "ts-node src/ice.ts",
     "build": "tsc && cp ./src/lint/.eslintrc.js ./es/lint/.eslintrc.js",
+    "lint": "ts-node src/ice.ts lint src --ext .ts --fix",
     "release": "standard-version",
-    "lint": "ts-node src/ice.ts lint src --ext .ts --fix"
+    "release:patch": "standard-version --release-as patch",
+    "release:minor": "standard-version --release-as minor",
+    "release:major": "standard-version --release-as major",
+    "release:alpha": "standard-version --prerelease alpha",
+    "release:beta": "standard-version --prerelease beta"
   },
   "bin": {
     "ice": "es/ice.js"
