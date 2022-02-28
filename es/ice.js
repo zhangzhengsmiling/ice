@@ -12,6 +12,7 @@ var lint_1 = __importDefault(require("./lint"));
 var utils_1 = require("./utils");
 var dev_1 = __importDefault(require("./webpack/dev"));
 var build_1 = __importDefault(require("./webpack/build"));
+var init_1 = __importDefault(require("./init"));
 var toString = function (buffer) { return buffer.toString(); };
 var resolveCwd = function (cwd) { return function (filename) { return path_1.default.resolve(cwd, filename); }; };
 var getPkgByFilename = (0, utils_1.compose)(JSON.parse, toString, fs_1.default.readFileSync, resolveCwd(path_1.default.resolve(__dirname, '../')));
@@ -37,7 +38,11 @@ var lintCommand = new commander_1.Command('lint')
     .option('-s, --suggestion')
     .option('-f, --fix')
     .action(lint_1.default);
+var initCommand = new commander_1.Command('init')
+    .argument('name', 'name of project')
+    .action(init_1.default);
 registrySubCommand(commander_1.program, devCommand);
 registrySubCommand(commander_1.program, buildCommand);
 registrySubCommand(commander_1.program, lintCommand);
+registrySubCommand(commander_1.program, initCommand);
 commander_1.program.parse(process.argv);

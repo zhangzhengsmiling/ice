@@ -8,7 +8,7 @@ const init = (name: string) => {
   if (fs.existsSync(path.resolve(cwd, name))) {
     throw new Error(`${name} already exists, please check again...`);
   }
-  console.log(`classloning repo to ${name}...`);
+  console.log(`clone repo to ${name}...`);
   const buffer = execSync('git clone git@github.com:zhangzhengsmiling/react-template.git ' + name);
   console.log(buffer.toString())
 

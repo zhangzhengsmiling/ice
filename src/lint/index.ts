@@ -18,12 +18,14 @@ const verify = (lints: ESLint.LintResult[], suggestion = false) => {
 
 const dropPrefixPath = (prefix: string) => {
   return (path: string) => {
-    return path.replace(prefix, '');
+    return path.replace(prefix + '/', '');
   };
 };
 
 const resolvePrefix = (prefix: string) => {
   return (_path: string) => {
+    // 判断路径是否为绝对路径
+    if(_path.startsWith('/')) return _path;
     return path.join(prefix, _path);
   };
 };
@@ -46,6 +48,8 @@ const lint = async (filePaths: string[], option: IIceLintOption) => {
   const currentWorkPath = process.cwd();
   const { suggestion, fix, ext = [] } = option;
 
+  console.log(filePaths)
+
   const lintFiles = filePaths
     .map(resolvePrefix(currentWorkPath))
     .map(readFilesOfDir)
@@ -54,6 +58,8 @@ const lint = async (filePaths: string[], option: IIceLintOption) => {
     .filter(path => !/.eslintrc/.test(path))
     .filter(ofExtensions(ext))
     .map(resolvePrefix(currentWorkPath));
+
+  console.log('lint files...', lintFiles);
 
   const options = {
     overrideConfigFile: path.join(__dirname, './.eslintrc.js'),
