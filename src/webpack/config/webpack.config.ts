@@ -118,7 +118,7 @@ const getConfig = async (ENV: EnumEnvironment) => {
   });
 
   const CONFIG_FILE_PATH = getConfigFilePath(ENV);
-  const plugins = [
+  const plugins: any[] = [
     new CleanWebpackPlugin(),
     new HtmlWebpackPlugin({
       title: DOC_TITLE,

@@ -48,8 +48,6 @@ const lint = async (filePaths: string[], option: IIceLintOption) => {
   const currentWorkPath = process.cwd();
   const { suggestion, fix, ext = [] } = option;
 
-  console.log(filePaths)
-
   const lintFiles = filePaths
     .map(resolvePrefix(currentWorkPath))
     .map(readFilesOfDir)
@@ -58,8 +56,6 @@ const lint = async (filePaths: string[], option: IIceLintOption) => {
     .filter(path => !/.eslintrc/.test(path))
     .filter(ofExtensions(ext))
     .map(resolvePrefix(currentWorkPath));
-
-  console.log('lint files...', lintFiles);
 
   const options = {
     overrideConfigFile: path.join(__dirname, './.eslintrc.js'),

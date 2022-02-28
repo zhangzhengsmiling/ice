@@ -7,7 +7,7 @@ const build = async () => {
   const config = await getConfig(MODE);
   config.mode = MODE;
   const compilation = webpack(config as webpack.Configuration);
-  compilation.run((err?: Error, stats?: webpack.Stats) => {
+  compilation.run((err?: Error | null, stats?: webpack.Stats) => {
     if(err) throw err;
     if (!stats) return;
     if(stats.compilation.errors.length > 0)

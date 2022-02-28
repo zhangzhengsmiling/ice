@@ -1,6 +1,6 @@
 {
   "name": "@ice-age/ice",
-  "version": "2.1.2-beta.0",
+  "version": "1.0.5",
   "main": "index.js",
   "license": "MIT",
   "description": "A dev tools based on webpack for front end project",
