@@ -8,7 +8,7 @@ import lint from './lint';
 import { compose } from './utils';
 import start from './webpack/dev';
 import build from './webpack/build';
-import init from './init'
+import init from './init';
 
 const toString = (buffer: Buffer) => buffer.toString();
 const resolveCwd = (cwd: string) => (filename: string) => path.resolve(cwd, filename);
@@ -48,7 +48,7 @@ const lintCommand = new Command('lint')
 
 const initCommand = new Command('init')
   .argument('name', 'name of project')
-  .action(init)
+  .action(init);
 
 registrySubCommand(program, devCommand);
 registrySubCommand(program, buildCommand);
