@@ -88,6 +88,8 @@
 
 下面是一些可运行的脚本
 
+### ice init
+初始化项目，下载模板工程，模板工程已经集成ice。详细可查看模板库：[https://github.com/zhangzhengsmiling/react-template](https://github.com/zhangzhengsmiling/react-template)
 ### ice dev
 
 启动webpack dev server。类似于`webpack serve`, 内部用的是babel-loader编译ts代码，因此可能不会进行类型检查报错，你可以尝试通过`tsc --watch`进行类型检查。

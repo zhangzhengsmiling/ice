@@ -88,6 +88,9 @@ It is useful when you are going to create a demo project.I do not want to create
 
 Here are some scripts that has been integrated to `ice`. You can use the following scripts when you have installed `ice`. Here are some scripts listed briefly(Of course, you can run script `ice --help` to get detailed information.):
 
+### ice init
+You can download template project by running this script which is integrated with ice tools. More reference: [https://github.com/zhangzhengsmiling/react-template](https://github.com/zhangzhengsmiling/react-template)
+
 ### ice dev
 
 Start project just like `create-react-app`.It will start webpack dev server.It equals to running script ` webpack serve`. You can also run `tsc --watch` to start type checking.
