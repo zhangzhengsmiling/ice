@@ -60,6 +60,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 var webpack_1 = __importDefault(require("webpack"));
 var webpack_dev_server_1 = __importDefault(require("webpack-dev-server"));
+var chalk_1 = __importDefault(require("chalk"));
 var webpack_config_1 = __importStar(require("./config/webpack.config"));
 var MODE = webpack_config_1.EnumEnvironment.DEVELOPMENT;
 var dev = function () { return __awaiter(void 0, void 0, void 0, function () {
@@ -70,7 +71,13 @@ var dev = function () { return __awaiter(void 0, void 0, void 0, function () {
             case 1:
                 config = _a.sent();
                 config.mode = MODE;
-                compilation = (0, webpack_1.default)(config);
+                compilation = (0, webpack_1.default)(config, function (err) {
+                    if (err) {
+                        console.log(chalk_1.default.red('---------编译失败--------'));
+                        console.log(chalk_1.default.red(err));
+                        console.log(chalk_1.default.red('------------------------'));
+                    }
+                });
                 devServer = new webpack_dev_server_1.default(config.devServer, compilation);
                 devServer.start();
                 return [2 /*return*/];
