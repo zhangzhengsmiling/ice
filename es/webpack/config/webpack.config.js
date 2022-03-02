@@ -70,6 +70,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.EnumEnvironment = void 0;
+var css_loader_1 = require("./loaders/css-loader");
 var path_1 = __importDefault(require("path"));
 var fs_1 = __importDefault(require("fs"));
 var html_webpack_plugin_1 = __importDefault(require("html-webpack-plugin"));
@@ -211,6 +212,8 @@ var getConfig = function (ENV) { return __awaiter(void 0, void 0, void 0, functi
                             sass_loader_1.LOADER_SASS_MODULE,
                             img_loader_1.default,
                             font_loader_1.default,
+                            css_loader_1.LOADER_CSS,
+                            css_loader_1.LOADER_CSS_MODULE,
                         ],
                     },
                     stats: 'minimal',
@@ -219,6 +222,7 @@ var getConfig = function (ENV) { return __awaiter(void 0, void 0, void 0, functi
                     },
                 };
                 if (ENV === EnumEnvironment.DEVELOPMENT) {
+                    ;
                     config.devServer = mergeDevServerConfig({
                         client: {
                             overlay: {
@@ -226,11 +230,13 @@ var getConfig = function (ENV) { return __awaiter(void 0, void 0, void 0, functi
                                 warnings: false,
                             },
                             progress: true,
-                        }
+                        },
                     });
                 }
                 _a = decratorKeyForList('_key'), addKey = _a.addKey, removeKey = _a.removeKey;
-                return [4 /*yield*/, Promise.resolve().then(function () { return __importStar(require(path_1.default.resolve(process.cwd(), 'ice.config.js'))); }).then(function (module) { return module.default; })];
+                return [4 /*yield*/, Promise.resolve().then(function () { return __importStar(require(path_1.default.resolve(process.cwd(), 'ice.config.js'))); }).then(function (module) { return module.default; })
+                    // merge config
+                ];
             case 1:
                 customConfig = _d.sent();
                 _config = null;

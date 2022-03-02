@@ -92,7 +92,6 @@ var lint = function (filePaths, option) { return __awaiter(void 0, void 0, void 
                     return [2 /*return*/, console.log(chalk_1.default.yellow('do nothing!!'))];
                 currentWorkPath = process.cwd();
                 suggestion = option.suggestion, fix = option.fix, _a = option.ext, ext = _a === void 0 ? [] : _a;
-                console.log(filePaths);
                 lintFiles = filePaths
                     .map(resolvePrefix(currentWorkPath))
                     .map(readFilesOfDir)
@@ -101,7 +100,6 @@ var lint = function (filePaths, option) { return __awaiter(void 0, void 0, void 
                     .filter(function (path) { return !/.eslintrc/.test(path); })
                     .filter(ofExtensions(ext))
                     .map(resolvePrefix(currentWorkPath));
-                console.log('lint files...', lintFiles);
                 options = {
                     overrideConfigFile: path_1.default.join(__dirname, './.eslintrc.js'),
                     useEslintrc: false,
