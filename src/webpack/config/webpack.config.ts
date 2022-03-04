@@ -6,6 +6,7 @@ import LOADER_JS from './loaders/js-loader';
 import LOADER_TS from './loaders/ts-loader';
 import { LOADER_LESS_MODULE, LOADER_LESS } from './loaders/less-loader';
 import { LOADER_SASS, LOADER_SASS_MODULE } from './loaders/sass-loader';
+import { LOADER_CSS, LOADER_CSS_MODULE } from './loaders/css-loader';
 import LOADER_IMG from './loaders/img-loader';
 import LOADER_FONT from './loaders/font-loader';
 import { MiniCssExtractPlugin } from './plugins/plugin-mini-css-extract';
@@ -17,6 +18,7 @@ import TerserWebpackPlugin from 'terser-webpack-plugin';
 import webpack from 'webpack';
 import webpackDevServer from 'webpack-dev-server';
 const cwd = process.cwd();
+
 
 export enum EnumEnvironment {
   PRODUCTION = 'production',
@@ -91,12 +93,12 @@ const addCopyConfig = (configs: ICopyConfig[], copyConfig: ICopyConfig) => {
 const getConfig = async (ENV: EnumEnvironment) => {
   const decratorKeyForList = (key: string) => {
     return {
-      addKey: (list: {[key: string]: number}[]) => {
+      addKey: (list: { [key: string]: number }[]) => {
         list.forEach((item, index) => {
           item[key] = index;
         });
       },
-      removeKey: (list: {[key: string]: number;}[]) => {
+      removeKey: (list: { [key: string]: number }[]) => {
         list.forEach((item) => {
           delete item[key];
         });
@@ -118,12 +120,7 @@ const getConfig = async (ENV: EnumEnvironment) => {
   });
 
   const CONFIG_FILE_PATH = getConfigFilePath(ENV);
-  const plugins: (
-    CleanWebpackPlugin |
-    HtmlWebpackPlugin |
-    MiniCssExtractPlugin |
-    CopyWebpackPlugin
-  )[] = [
+  const plugins: (CleanWebpackPlugin | HtmlWebpackPlugin | MiniCssExtractPlugin | CopyWebpackPlugin)[] = [
     new CleanWebpackPlugin(),
     new HtmlWebpackPlugin({
       title: DOC_TITLE,
@@ -164,6 +161,8 @@ const getConfig = async (ENV: EnumEnvironment) => {
         LOADER_SASS_MODULE,
         LOADER_IMG,
         LOADER_FONT,
+        LOADER_CSS,
+        LOADER_CSS_MODULE,
       ],
     },
     optimization: {
@@ -180,16 +179,13 @@ const getConfig = async (ENV: EnumEnvironment) => {
         },
         logging: 'none',
         progress: true,
-      }
+      },
     });
   }
 
   const { addKey, removeKey } = decratorKeyForList('_key');
 
-  const customConfig = await import(
-    path.resolve(process.cwd(),
-    'ice.config.js')
-  ).then(module => module.default);
+  const customConfig = await import(path.resolve(process.cwd(), 'ice.config.js')).then((module) => module.default);
 
   // merge config
   let _config = null;
@@ -197,15 +193,16 @@ const getConfig = async (ENV: EnumEnvironment) => {
     _config = merge({}, config, customConfig);
     return _config;
   } else if (typeof customConfig === 'function') {
-    addKey(config.module?.rules as { [key: string]: number; }[]);
-    _config = (customConfig as (config: webpack.Configuration, options: {env: unknown}) => webpack.Configuration)(config, { env: process.env });
-    removeKey(config.module?.rules as { [key: string]: number; }[]);
+    addKey(config.module?.rules as { [key: string]: number }[]);
+    _config = (customConfig as (config: webpack.Configuration, options: { env: unknown }) => webpack.Configuration)(
+      config,
+      { env: process.env },
+    );
+    removeKey(config.module?.rules as { [key: string]: number }[]);
     return _config;
   }
 };
 
-export default getConfig as (env: EnumEnvironment) => Promise<
-  webpackDevServer.Configuration &
-  webpack.Configuration &
-  { devServer: DevServerConfiguration; }
->;
+export default getConfig as (
+  env: EnumEnvironment,
+) => Promise<webpackDevServer.Configuration & webpack.Configuration & { devServer: DevServerConfiguration }>
