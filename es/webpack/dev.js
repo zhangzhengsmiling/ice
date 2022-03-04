@@ -60,25 +60,18 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 var webpack_1 = __importDefault(require("webpack"));
 var webpack_dev_server_1 = __importDefault(require("webpack-dev-server"));
-var chalk_1 = __importDefault(require("chalk"));
 var webpack_config_1 = __importStar(require("./config/webpack.config"));
 var MODE = webpack_config_1.EnumEnvironment.DEVELOPMENT;
 var dev = function () { return __awaiter(void 0, void 0, void 0, function () {
-    var config, compilation, devServer;
+    var config, compiler, devServer;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0: return [4 /*yield*/, (0, webpack_config_1.default)(MODE)];
             case 1:
                 config = _a.sent();
                 config.mode = MODE;
-                compilation = (0, webpack_1.default)(config, function (err) {
-                    if (err) {
-                        console.log(chalk_1.default.red('---------编译失败--------'));
-                        console.log(chalk_1.default.red(err));
-                        console.log(chalk_1.default.red('------------------------'));
-                    }
-                });
-                devServer = new webpack_dev_server_1.default(config.devServer, compilation);
+                compiler = (0, webpack_1.default)(config);
+                devServer = new webpack_dev_server_1.default(config.devServer, compiler);
                 devServer.start();
                 return [2 /*return*/];
         }

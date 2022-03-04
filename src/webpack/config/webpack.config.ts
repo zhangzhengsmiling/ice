@@ -166,7 +166,6 @@ const getConfig = async (ENV: EnumEnvironment) => {
         LOADER_FONT,
       ],
     },
-    stats: 'none',
     optimization: {
       minimizer: [new TerserWebpackPlugin(), new CssMinimizerWebpackPlugin()],
     },
@@ -179,6 +178,7 @@ const getConfig = async (ENV: EnumEnvironment) => {
           errors: true,
           warnings: false,
         },
+        logging: 'none',
         progress: true,
       }
     });

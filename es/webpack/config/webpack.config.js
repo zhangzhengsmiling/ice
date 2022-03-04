@@ -213,7 +213,6 @@ var getConfig = function (ENV) { return __awaiter(void 0, void 0, void 0, functi
                             font_loader_1.default,
                         ],
                     },
-                    stats: 'none',
                     optimization: {
                         minimizer: [new terser_webpack_plugin_1.default(), new css_minimizer_webpack_plugin_1.default()],
                     },
@@ -225,6 +224,7 @@ var getConfig = function (ENV) { return __awaiter(void 0, void 0, void 0, functi
                                 errors: true,
                                 warnings: false,
                             },
+                            logging: 'none',
                             progress: true,
                         }
                     });
