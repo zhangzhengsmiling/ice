@@ -7,8 +7,8 @@ const MODE = EnumEnvironment.DEVELOPMENT;
 const dev = async () => {
   const config = await getConfig(MODE);
   config.mode = MODE;
-  const compilation = webpack(config);
-  const devServer = new WebpackDevServer(config.devServer, compilation);
+  const compiler = webpack(config);
+  const devServer = new WebpackDevServer(config.devServer, compiler);
   devServer.start();
 };
 

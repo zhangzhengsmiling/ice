@@ -8,7 +8,7 @@ var path_1 = __importDefault(require("path"));
 var plugin_mini_css_extract_1 = require("../plugins/plugin-mini-css-extract");
 var cwd = process.cwd();
 exports.LOADER_CSS = {
-    test: /(?<!\.module)\.css$/,
+    test: /(?<!\.module)\.css/,
     include: path_1.default.resolve(cwd, 'src'),
     use: [
         { loader: plugin_mini_css_extract_1.loader },

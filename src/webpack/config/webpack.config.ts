@@ -11,6 +11,7 @@ import LOADER_IMG from './loaders/img-loader';
 import LOADER_FONT from './loaders/font-loader';
 import { MiniCssExtractPlugin } from './plugins/plugin-mini-css-extract';
 import CopyWebpackPlugin from 'copy-webpack-plugin';
+import FriendlyErrorsWebpackPlugin from 'friendly-errors-webpack-plugin';
 import { Configuration as DevServerConfiguration } from 'webpack-dev-server';
 import merge from 'webpack-merge';
 import CssMinimizerWebpackPlugin from 'css-minimizer-webpack-plugin';
@@ -91,7 +92,7 @@ const addCopyConfig = (configs: ICopyConfig[], copyConfig: ICopyConfig) => {
 };
 
 const getConfig = async (ENV: EnumEnvironment) => {
-  const decratorKeyForList = (key: string) => {
+  const decoratorKeyForList = (key: string) => {
     return {
       addKey: (list: { [key: string]: number }[]) => {
         list.forEach((item, index) => {
@@ -120,8 +121,15 @@ const getConfig = async (ENV: EnumEnvironment) => {
   });
 
   const CONFIG_FILE_PATH = getConfigFilePath(ENV);
-  const plugins: (CleanWebpackPlugin | HtmlWebpackPlugin | MiniCssExtractPlugin | CopyWebpackPlugin)[] = [
+  const plugins: (
+    CleanWebpackPlugin |
+    HtmlWebpackPlugin |
+    MiniCssExtractPlugin |
+    CopyWebpackPlugin |
+    FriendlyErrorsWebpackPlugin
+  )[] = [
     new CleanWebpackPlugin(),
+    new FriendlyErrorsWebpackPlugin(),
     new HtmlWebpackPlugin({
       title: DOC_TITLE,
       configPath: CONFIG_FILE_PATH,
@@ -165,7 +173,6 @@ const getConfig = async (ENV: EnumEnvironment) => {
         LOADER_CSS_MODULE,
       ],
     },
-    stats: 'minimal',
     optimization: {
       minimizer: [new TerserWebpackPlugin(), new CssMinimizerWebpackPlugin()],
     },
@@ -178,12 +185,13 @@ const getConfig = async (ENV: EnumEnvironment) => {
           errors: true,
           warnings: false,
         },
+        logging: 'none',
         progress: true,
       },
     });
   }
 
-  const { addKey, removeKey } = decratorKeyForList('_key');
+  const { addKey, removeKey } = decoratorKeyForList('_key');
 
   const customConfig = await import(path.resolve(process.cwd(), 'ice.config.js')).then((module) => module.default);
 

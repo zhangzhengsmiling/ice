@@ -70,7 +70,6 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.EnumEnvironment = void 0;
-var css_loader_1 = require("./loaders/css-loader");
 var path_1 = __importDefault(require("path"));
 var fs_1 = __importDefault(require("fs"));
 var html_webpack_plugin_1 = __importDefault(require("html-webpack-plugin"));
@@ -79,10 +78,12 @@ var js_loader_1 = __importDefault(require("./loaders/js-loader"));
 var ts_loader_1 = __importDefault(require("./loaders/ts-loader"));
 var less_loader_1 = require("./loaders/less-loader");
 var sass_loader_1 = require("./loaders/sass-loader");
+var css_loader_1 = require("./loaders/css-loader");
 var img_loader_1 = __importDefault(require("./loaders/img-loader"));
 var font_loader_1 = __importDefault(require("./loaders/font-loader"));
 var plugin_mini_css_extract_1 = require("./plugins/plugin-mini-css-extract");
 var copy_webpack_plugin_1 = __importDefault(require("copy-webpack-plugin"));
+var friendly_errors_webpack_plugin_1 = __importDefault(require("friendly-errors-webpack-plugin"));
 var webpack_merge_1 = __importDefault(require("webpack-merge"));
 var css_minimizer_webpack_plugin_1 = __importDefault(require("css-minimizer-webpack-plugin"));
 var terser_webpack_plugin_1 = __importDefault(require("terser-webpack-plugin"));
@@ -143,12 +144,12 @@ var addCopyConfig = function (configs, copyConfig) {
     configs.push(copyConfig);
 };
 var getConfig = function (ENV) { return __awaiter(void 0, void 0, void 0, function () {
-    var decratorKeyForList, DOC_TITLE, COPY_CONFIG, CONFIG_FILE_PATH, plugins, config, _a, addKey, removeKey, customConfig, _config;
+    var decoratorKeyForList, DOC_TITLE, COPY_CONFIG, CONFIG_FILE_PATH, plugins, config, _a, addKey, removeKey, customConfig, _config;
     var _b, _c;
     return __generator(this, function (_d) {
         switch (_d.label) {
             case 0:
-                decratorKeyForList = function (key) {
+                decoratorKeyForList = function (key) {
                     return {
                         addKey: function (list) {
                             list.forEach(function (item, index) {
@@ -175,6 +176,7 @@ var getConfig = function (ENV) { return __awaiter(void 0, void 0, void 0, functi
                 CONFIG_FILE_PATH = getConfigFilePath(ENV);
                 plugins = [
                     new clean_webpack_plugin_1.CleanWebpackPlugin(),
+                    new friendly_errors_webpack_plugin_1.default(),
                     new html_webpack_plugin_1.default({
                         title: DOC_TITLE,
                         configPath: CONFIG_FILE_PATH,
@@ -216,27 +218,24 @@ var getConfig = function (ENV) { return __awaiter(void 0, void 0, void 0, functi
                             css_loader_1.LOADER_CSS_MODULE,
                         ],
                     },
-                    stats: 'minimal',
                     optimization: {
                         minimizer: [new terser_webpack_plugin_1.default(), new css_minimizer_webpack_plugin_1.default()],
                     },
                 };
                 if (ENV === EnumEnvironment.DEVELOPMENT) {
-                    ;
                     config.devServer = mergeDevServerConfig({
                         client: {
                             overlay: {
                                 errors: true,
                                 warnings: false,
                             },
+                            logging: 'none',
                             progress: true,
                         },
                     });
                 }
-                _a = decratorKeyForList('_key'), addKey = _a.addKey, removeKey = _a.removeKey;
-                return [4 /*yield*/, Promise.resolve().then(function () { return __importStar(require(path_1.default.resolve(process.cwd(), 'ice.config.js'))); }).then(function (module) { return module.default; })
-                    // merge config
-                ];
+                _a = decoratorKeyForList('_key'), addKey = _a.addKey, removeKey = _a.removeKey;
+                return [4 /*yield*/, Promise.resolve().then(function () { return __importStar(require(path_1.default.resolve(process.cwd(), 'ice.config.js'))); }).then(function (module) { return module.default; })];
             case 1:
                 customConfig = _d.sent();
                 _config = null;
