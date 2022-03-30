@@ -3,7 +3,7 @@ import { loader } from '../plugins/plugin-mini-css-extract';
 const cwd = process.cwd();
 
 export const LOADER_CSS = {
-  test: /(?<!\.module)\.css$/,
+  test: /(?<!\.module)\.css/,
   include: path.resolve(cwd, 'src'),
   use: [
     { loader },
