@@ -2,6 +2,34 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.0.9](https://github.com/zhangzhengsmiling/ice/compare/v1.0.7...v1.0.9) (2022-03-30)
+
+
+### Features
+
+* add css-loader ([adb9012](https://github.com/zhangzhengsmiling/ice/commit/adb9012f82bc5f07527235aef1a9fa2909a2e0f1))
+
+
+### Bug Fixes
+
+* add css-loader ([5ab4663](https://github.com/zhangzhengsmiling/ice/commit/5ab466382d98a33b1834167696e1e5df42abcbfd))
+* build error, webpack run twice ([477d839](https://github.com/zhangzhengsmiling/ice/commit/477d839f2cca7586fe5ecc3554d599ff6a3dec68))
+* stats error infomation ([939271b](https://github.com/zhangzhengsmiling/ice/commit/939271b0d131faafe3274eaf2e9140f0d7a9a455))
+
+### [1.0.8](https://github.com/zhangzhengsmiling/ice/compare/v1.0.7...v1.0.8) (2022-03-30)
+
+
+### Features
+
+* add css-loader ([adb9012](https://github.com/zhangzhengsmiling/ice/commit/adb9012f82bc5f07527235aef1a9fa2909a2e0f1))
+
+
+### Bug Fixes
+
+* add css-loader ([5ab4663](https://github.com/zhangzhengsmiling/ice/commit/5ab466382d98a33b1834167696e1e5df42abcbfd))
+* build error, webpack run twice ([477d839](https://github.com/zhangzhengsmiling/ice/commit/477d839f2cca7586fe5ecc3554d599ff6a3dec68))
+* stats error infomation ([939271b](https://github.com/zhangzhengsmiling/ice/commit/939271b0d131faafe3274eaf2e9140f0d7a9a455))
+
 ### [1.0.7](https://github.com/zhangzhengsmiling/ice/compare/v1.0.6...v1.0.7) (2022-02-28)
 
 ### 1.0.6 (2022-02-28)
