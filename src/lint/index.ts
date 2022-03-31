@@ -1,3 +1,4 @@
+import { compose } from './../utils/compose';
 import path from 'path';
 import { ESLint } from 'eslint';
 import { files } from './utils';
@@ -12,6 +13,15 @@ interface IIceLintOption {
   fix?: boolean;
   ext?: string[];
 }
+
+const neg = (b: (Promise<boolean>)): Promise<boolean> => {
+  return b.then(b => !b);
+};
+
+const asyncFilter = <T>(array: T[], predict: (t: T) => Promise<boolean>) => {
+  return Promise.all(array.map(predict))
+    .then(results => array.filter((_, idx) => results[idx]));
+};
 
 const verify = (lints: ESLint.LintResult[], suggestion = false) => {
   lints.forEach(displayLintMessage({ showSuggestion: suggestion }));
@@ -49,7 +59,7 @@ const lint = async (filePaths: string[], option: IIceLintOption) => {
   const currentWorkPath = process.cwd();
   const { suggestion, fix, ext = [] } = option;
 
-  const lintFiles = filePaths
+  const _lintFiles = filePaths
     .map(resolvePrefix(currentWorkPath))
     .map(readFilesOfDir)
     .reduce(combineArray, [])
@@ -68,6 +78,7 @@ const lint = async (filePaths: string[], option: IIceLintOption) => {
   };
   const lint = new ESLint(options);
 
+  const lintFiles = await asyncFilter(_lintFiles, compose(neg, lint.isPathIgnored.bind(lint)));
   const formatter = await lint.loadFormatter();
   const filesLint = lintFiles.map((lintFile) => {
     return lint.lintFiles(lintFile);

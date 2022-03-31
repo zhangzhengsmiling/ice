@@ -1,7 +1,7 @@
 import chalk from 'chalk';
 
-export const mapServerityString = (serverity: number) => {
-  switch(serverity) {
+export const mapSeverityString = (severity: number) => {
+  switch(severity) {
     case 1:
       return chalk.yellow('warning');
     case 2:

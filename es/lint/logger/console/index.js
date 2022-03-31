@@ -11,5 +11,5 @@ var __exportStar = (this && this.__exportStar) || function(m, exports) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 __exportStar(require("./display-suggestions"), exports);
-__exportStar(require("./map-serverity-string"), exports);
+__exportStar(require("./map-severity-string"), exports);
 __exportStar(require("./display-lint-message"), exports);

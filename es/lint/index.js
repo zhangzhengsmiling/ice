@@ -48,6 +48,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+var compose_1 = require("./../utils/compose");
 var path_1 = __importDefault(require("path"));
 var eslint_1 = require("eslint");
 var utils_1 = require("./utils");
@@ -55,6 +56,13 @@ var console_1 = require("./logger/console");
 var chalk_1 = __importDefault(require("chalk"));
 var readFilesOfDir = utils_1.files.readFilesOfDir;
 var EXTENSIONS_ESLINT_RC = ['.json', '.js'];
+var neg = function (b) {
+    return b.then(function (b) { return !b; });
+};
+var asyncFilter = function (array, predict) {
+    return Promise.all(array.map(predict))
+        .then(function (results) { return array.filter(function (_, idx) { return results[idx]; }); });
+};
 var verify = function (lints, suggestion) {
     if (suggestion === void 0) { suggestion = false; }
     lints.forEach((0, console_1.displayLintMessage)({ showSuggestion: suggestion }));
@@ -85,7 +93,7 @@ var ofExtensions = function (extensions) {
     };
 };
 var lint = function (filePaths, option) { return __awaiter(void 0, void 0, void 0, function () {
-    var currentWorkPath, suggestion, fix, _a, ext, lintFiles, eslintRcFile, overrideConfigFile, options, lint, formatter, filesLint;
+    var currentWorkPath, suggestion, fix, _a, ext, _lintFiles, eslintRcFile, overrideConfigFile, options, lint, lintFiles, formatter, filesLint;
     return __generator(this, function (_b) {
         switch (_b.label) {
             case 0:
@@ -93,7 +101,7 @@ var lint = function (filePaths, option) { return __awaiter(void 0, void 0, void 
                     return [2 /*return*/, console.log(chalk_1.default.yellow('do nothing!!'))];
                 currentWorkPath = process.cwd();
                 suggestion = option.suggestion, fix = option.fix, _a = option.ext, ext = _a === void 0 ? [] : _a;
-                lintFiles = filePaths
+                _lintFiles = filePaths
                     .map(resolvePrefix(currentWorkPath))
                     .map(readFilesOfDir)
                     .reduce(combineArray, [])
@@ -102,15 +110,18 @@ var lint = function (filePaths, option) { return __awaiter(void 0, void 0, void 
                     .filter(ofExtensions(ext))
                     .map(resolvePrefix(currentWorkPath));
                 eslintRcFile = utils_1.files.resolveFiles(EXTENSIONS_ESLINT_RC)(path_1.default.resolve(currentWorkPath, '.eslintrc'));
-                overrideConfigFile = eslintRcFile ? eslintRcFile : path_1.default.resolve(__dirname, './.eslintrc.js');
+                overrideConfigFile = eslintRcFile ? eslintRcFile : path_1.default.resolve(__dirname, '.eslintrc.js');
                 options = {
                     overrideConfigFile: overrideConfigFile,
                     useEslintrc: false,
                     fix: fix,
                 };
                 lint = new eslint_1.ESLint(options);
-                return [4 /*yield*/, lint.loadFormatter()];
+                return [4 /*yield*/, asyncFilter(_lintFiles, (0, compose_1.compose)(neg, lint.isPathIgnored.bind(lint)))];
             case 1:
+                lintFiles = _b.sent();
+                return [4 /*yield*/, lint.loadFormatter()];
+            case 2:
                 formatter = _b.sent();
                 filesLint = lintFiles.map(function (lintFile) {
                     return lint.lintFiles(lintFile);
