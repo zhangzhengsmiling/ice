@@ -34,3 +34,20 @@ const _read = (allFiles: string[] = [], dirPath: string): string[] => {
 export const readFilesOfDir = (dirPath: string) => {
   return _read([], dirPath);
 };
+
+export const resolveFiles = (extensions: string[]) => {
+  return (filename: string) => {
+    let result: string | null = null;
+    for(let i = 0; i < extensions.length; i++) {
+      const _path = filename + extensions[i];
+      const absPath = path.isAbsolute(_path) ? _path : path.resolve(__dirname, _path);
+      const isExist = fs.existsSync(absPath);
+      if (isExist) {
+        result = absPath;
+        break;
+      }
+    }
+    return result;
+  };
+};
+

@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.readFilesOfDir = exports.isDirectorySync = void 0;
+exports.resolveFiles = exports.readFilesOfDir = exports.isDirectorySync = void 0;
 var fs_1 = __importDefault(require("fs"));
 var path_1 = __importDefault(require("path"));
 var isDirectorySync = function (path) {
@@ -52,3 +52,19 @@ var readFilesOfDir = function (dirPath) {
     return _read([], dirPath);
 };
 exports.readFilesOfDir = readFilesOfDir;
+var resolveFiles = function (extensions) {
+    return function (filename) {
+        var result = null;
+        for (var i = 0; i < extensions.length; i++) {
+            var _path = filename + extensions[i];
+            var absPath = path_1.default.isAbsolute(_path) ? _path : path_1.default.resolve(__dirname, _path);
+            var isExist = fs_1.default.existsSync(absPath);
+            if (isExist) {
+                result = absPath;
+                break;
+            }
+        }
+        return result;
+    };
+};
+exports.resolveFiles = resolveFiles;
