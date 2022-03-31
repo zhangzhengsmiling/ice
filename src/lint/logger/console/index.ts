@@ -1,3 +1,3 @@
 export * from './display-suggestions';
-export * from './map-serverity-string';
+export * from './map-severity-string';
 export * from './display-lint-message';
