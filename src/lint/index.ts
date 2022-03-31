@@ -6,6 +6,7 @@ import chalk from 'chalk';
 
 const { readFilesOfDir } = files;
 
+const EXTENSIONS_ESLINT_RC = ['.json', '.js'];
 interface IIceLintOption {
   suggestion?: boolean;
   fix?: boolean;
@@ -57,8 +58,11 @@ const lint = async (filePaths: string[], option: IIceLintOption) => {
     .filter(ofExtensions(ext))
     .map(resolvePrefix(currentWorkPath));
 
+  const eslintRcFile = files.resolveFiles(EXTENSIONS_ESLINT_RC)(path.resolve(currentWorkPath, '.eslintrc'));
+  const overrideConfigFile = eslintRcFile ? eslintRcFile : path.resolve(__dirname, '.eslintrc.js');
+
   const options = {
-    overrideConfigFile: path.join(__dirname, './.eslintrc.js'),
+    overrideConfigFile,
     useEslintrc: false,
     fix,
   };

@@ -54,6 +54,7 @@ var utils_1 = require("./utils");
 var console_1 = require("./logger/console");
 var chalk_1 = __importDefault(require("chalk"));
 var readFilesOfDir = utils_1.files.readFilesOfDir;
+var EXTENSIONS_ESLINT_RC = ['.json', '.js'];
 var verify = function (lints, suggestion) {
     if (suggestion === void 0) { suggestion = false; }
     lints.forEach((0, console_1.displayLintMessage)({ showSuggestion: suggestion }));
@@ -84,7 +85,7 @@ var ofExtensions = function (extensions) {
     };
 };
 var lint = function (filePaths, option) { return __awaiter(void 0, void 0, void 0, function () {
-    var currentWorkPath, suggestion, fix, _a, ext, lintFiles, options, lint, formatter, filesLint;
+    var currentWorkPath, suggestion, fix, _a, ext, lintFiles, eslintRcFile, overrideConfigFile, options, lint, formatter, filesLint;
     return __generator(this, function (_b) {
         switch (_b.label) {
             case 0:
@@ -100,8 +101,10 @@ var lint = function (filePaths, option) { return __awaiter(void 0, void 0, void 
                     .filter(function (path) { return !/.eslintrc/.test(path); })
                     .filter(ofExtensions(ext))
                     .map(resolvePrefix(currentWorkPath));
+                eslintRcFile = utils_1.files.resolveFiles(EXTENSIONS_ESLINT_RC)(path_1.default.resolve(currentWorkPath, '.eslintrc'));
+                overrideConfigFile = eslintRcFile ? eslintRcFile : path_1.default.resolve(__dirname, './.eslintrc.js');
                 options = {
-                    overrideConfigFile: path_1.default.join(__dirname, './.eslintrc.js'),
+                    overrideConfigFile: overrideConfigFile,
                     useEslintrc: false,
                     fix: fix,
                 };
