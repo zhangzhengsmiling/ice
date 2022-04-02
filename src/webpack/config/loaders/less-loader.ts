@@ -1,7 +1,7 @@
-import path from 'path'
-import { loader } from '../plugins/plugin-mini-css-extract'
-import Rule from './Rule'
-const cwd = process.cwd()
+import path from 'path';
+import { loader } from '../plugins/plugin-mini-css-extract';
+import Rule from './Rule';
+const cwd = process.cwd();
 
 export const LOADER_LESS = Rule.of()
   .test(/(?<!\.module)\.less/)

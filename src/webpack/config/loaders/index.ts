@@ -1,5 +1,5 @@
 export * from './css-loader';
-export * from './less-loader'
+export * from './less-loader';
 export * from './sass-loader';
 export * from './js-loader';
 export * from './ts-loader';

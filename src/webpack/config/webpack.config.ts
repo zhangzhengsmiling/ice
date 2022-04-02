@@ -20,7 +20,7 @@ const cwd = process.cwd();
 
 class SwitchMap<ConditionType, ResultType> {
 
-  _map: Map<ConditionType, ResultType>
+  _map: Map<ConditionType, ResultType>;
 
   constructor(map: Map<ConditionType, ResultType>) {
     this._map = map;
