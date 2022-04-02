@@ -1,6 +1,6 @@
-const loader = {
-  test: /\.(png|jpe?g|gif)$/i,
-  use: ['file-loader'],
-};
+import Rule from './Rule';
 
-export default loader;
+export const LOADER_IMG = Rule.of()
+  .test(/\.(png|jpe?g|gif)$/i)
+  .use('file-loader')
+  .getOptions();

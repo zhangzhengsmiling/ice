@@ -1,7 +1,11 @@
 "use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-var loader = {
-    test: /\.(png|jpe?g|gif)$/i,
-    use: ['file-loader'],
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
 };
-exports.default = loader;
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.LOADER_IMG = void 0;
+var Rule_1 = __importDefault(require("./Rule"));
+exports.LOADER_IMG = Rule_1.default.of()
+    .test(/\.(png|jpe?g|gif)$/i)
+    .use('file-loader')
+    .getOptions();

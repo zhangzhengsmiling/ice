@@ -1,6 +1,6 @@
-const loader = {
-  test: /\.(woff|woff2|eot|ttf|svg)$/,
-  use: ['url-loader?limit=100000'],
-};
+import Rule from './Rule';
 
-export default loader;
+export const LOADER_FONT = Rule.of()
+  .test(/\.(woff|woff2|eot|ttf|svg)$/)
+  .use('url-loader?limit=100000')
+  .getOptions();
