@@ -1,14 +1,10 @@
 import path from 'path';
 import fs from 'fs';
-import HtmlWebpackPlugin from 'html-webpack-plugin';
-import { CleanWebpackPlugin } from 'clean-webpack-plugin';
-import LOADER_JS from './loaders/js-loader';
-import LOADER_TS from './loaders/ts-loader';
-import { LOADER_LESS_MODULE, LOADER_LESS } from './loaders/less-loader';
-import { LOADER_SASS, LOADER_SASS_MODULE } from './loaders/sass-loader';
-import { LOADER_CSS, LOADER_CSS_MODULE } from './loaders/css-loader';
-import LOADER_IMG from './loaders/img-loader';
-import LOADER_FONT from './loaders/font-loader';
+import {
+  LOADER_LESS_MODULE, LOADER_LESS, LOADER_SASS,
+  LOADER_SASS_MODULE, LOADER_CSS, LOADER_CSS_MODULE,
+  LOADER_JS, LOADER_TS, LOADER_IMG, LOADER_FONT
+} from './loaders';
 import { MiniCssExtractPlugin } from './plugins/plugin-mini-css-extract';
 import CopyWebpackPlugin from 'copy-webpack-plugin';
 import FriendlyErrorsWebpackPlugin from 'friendly-errors-webpack-plugin';
@@ -18,8 +14,32 @@ import CssMinimizerWebpackPlugin from 'css-minimizer-webpack-plugin';
 import TerserWebpackPlugin from 'terser-webpack-plugin';
 import webpack from 'webpack';
 import webpackDevServer from 'webpack-dev-server';
+import HtmlWebpackPlugin from 'html-webpack-plugin';
+import { CleanWebpackPlugin } from 'clean-webpack-plugin';
 const cwd = process.cwd();
 
+class SwitchMap<ConditionType, ResultType> {
+
+  _map: Map<ConditionType, ResultType>
+
+  constructor(map: Map<ConditionType, ResultType>) {
+    this._map = map;
+  }
+
+  static of<ConditionType, ResultType>() {
+    return new SwitchMap(new Map<ConditionType, ResultType>());
+  }
+
+  case(condition: ConditionType, result: ResultType) {
+    const _map = new Map(this._map);
+    _map.set(condition, result);
+    return new SwitchMap(_map);
+  }
+
+  get(condition: ConditionType) {
+    return this._map.get(condition);
+  }
+}
 
 export enum EnumEnvironment {
   PRODUCTION = 'production',
@@ -30,6 +50,18 @@ interface ICopyConfig {
   from: string;
   to: string;
 }
+
+const bundleFilename = SwitchMap.of<EnumEnvironment, string>()
+  .case(EnumEnvironment.DEVELOPMENT, '[name].bundle.js')
+  .case(EnumEnvironment.PRODUCTION, '[name].bundle.[chunkhash:8].js');
+
+const configFilePath = SwitchMap.of<EnumEnvironment, string>()
+  .case(EnumEnvironment.DEVELOPMENT, '/config/config.dev.js')
+  .case(EnumEnvironment.PRODUCTION, '/config/config.prod.js');
+
+const cssExtractFilename = SwitchMap.of<EnumEnvironment, string>()
+  .case(EnumEnvironment.DEVELOPMENT, '[name].css')
+  .case(EnumEnvironment.PRODUCTION, '[name].[chunkhash:8].css');
 
 const mergeDevServerConfig = (
   devServerConfig: DevServerConfiguration = {},
@@ -53,36 +85,9 @@ const mergeEntryConfig = (entryConfig?: webpack.Entry) => {
 const mergeOutputConfig = (env: EnumEnvironment) => (outputConfig?: object) => {
   const DEFAULT_OUTPUT_CONFIG = {
     path: path.resolve(cwd, './build'),
-    filename: getBundledFilename(env),
+    filename: bundleFilename.get(env),
   };
   return outputConfig || DEFAULT_OUTPUT_CONFIG;
-};
-
-const getBundledFilename = (env: EnumEnvironment) => {
-  switch (env) {
-    case EnumEnvironment.DEVELOPMENT:
-      return '[name].bundle.js';
-    case EnumEnvironment.PRODUCTION:
-      return '[name].bundle.[chunkhash:8].js';
-  }
-};
-
-const getConfigFilePath = (env: EnumEnvironment) => {
-  switch (env) {
-    case EnumEnvironment.DEVELOPMENT:
-      return '/config/config.dev.js';
-    case EnumEnvironment.PRODUCTION:
-      return '/config/config.prod.js';
-  }
-};
-
-const getCssExtractFileName = (env: EnumEnvironment) => {
-  switch (env) {
-    case EnumEnvironment.DEVELOPMENT:
-      return '[name].css';
-    case EnumEnvironment.PRODUCTION:
-      return '[name].[chunkhash:8].css';
-  }
 };
 
 const addCopyConfig = (configs: ICopyConfig[], copyConfig: ICopyConfig) => {
@@ -120,7 +125,7 @@ const getConfig = async (ENV: EnumEnvironment) => {
     to: path.resolve(cwd, 'build/config'),
   });
 
-  const CONFIG_FILE_PATH = getConfigFilePath(ENV);
+  const CONFIG_FILE_PATH = configFilePath.get(ENV);
   const plugins: (
     CleanWebpackPlugin |
     HtmlWebpackPlugin |
@@ -138,7 +143,7 @@ const getConfig = async (ENV: EnumEnvironment) => {
       filename: 'index.html',
     }),
     new MiniCssExtractPlugin({
-      filename: getCssExtractFileName(ENV),
+      filename: cssExtractFilename.get(ENV),
     }),
   ];
 
@@ -213,4 +218,4 @@ const getConfig = async (ENV: EnumEnvironment) => {
 
 export default getConfig as (
   env: EnumEnvironment,
-) => Promise<webpackDevServer.Configuration & webpack.Configuration & { devServer: DevServerConfiguration }>
+) => Promise<webpackDevServer.Configuration & webpack.Configuration & { devServer: DevServerConfiguration }>;

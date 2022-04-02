@@ -72,27 +72,47 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.EnumEnvironment = void 0;
 var path_1 = __importDefault(require("path"));
 var fs_1 = __importDefault(require("fs"));
-var html_webpack_plugin_1 = __importDefault(require("html-webpack-plugin"));
-var clean_webpack_plugin_1 = require("clean-webpack-plugin");
-var js_loader_1 = __importDefault(require("./loaders/js-loader"));
-var ts_loader_1 = __importDefault(require("./loaders/ts-loader"));
-var less_loader_1 = require("./loaders/less-loader");
-var sass_loader_1 = require("./loaders/sass-loader");
-var css_loader_1 = require("./loaders/css-loader");
-var img_loader_1 = __importDefault(require("./loaders/img-loader"));
-var font_loader_1 = __importDefault(require("./loaders/font-loader"));
+var loaders_1 = require("./loaders");
 var plugin_mini_css_extract_1 = require("./plugins/plugin-mini-css-extract");
 var copy_webpack_plugin_1 = __importDefault(require("copy-webpack-plugin"));
 var friendly_errors_webpack_plugin_1 = __importDefault(require("friendly-errors-webpack-plugin"));
 var webpack_merge_1 = __importDefault(require("webpack-merge"));
 var css_minimizer_webpack_plugin_1 = __importDefault(require("css-minimizer-webpack-plugin"));
 var terser_webpack_plugin_1 = __importDefault(require("terser-webpack-plugin"));
+var html_webpack_plugin_1 = __importDefault(require("html-webpack-plugin"));
+var clean_webpack_plugin_1 = require("clean-webpack-plugin");
 var cwd = process.cwd();
+var SwitchMap = /** @class */ (function () {
+    function SwitchMap(map) {
+        this._map = map;
+    }
+    SwitchMap.of = function () {
+        return new SwitchMap(new Map());
+    };
+    SwitchMap.prototype.case = function (condition, result) {
+        var _map = new Map(this._map);
+        _map.set(condition, result);
+        return new SwitchMap(_map);
+    };
+    SwitchMap.prototype.get = function (condition) {
+        return this._map.get(condition);
+    };
+    return SwitchMap;
+}());
 var EnumEnvironment;
 (function (EnumEnvironment) {
     EnumEnvironment["PRODUCTION"] = "production";
     EnumEnvironment["DEVELOPMENT"] = "development";
 })(EnumEnvironment = exports.EnumEnvironment || (exports.EnumEnvironment = {}));
+var bundleFilename = SwitchMap.of()
+    .case(EnumEnvironment.DEVELOPMENT, '[name].bundle.js')
+    .case(EnumEnvironment.PRODUCTION, '[name].bundle.[chunkhash:8].js');
+var configFilePath = SwitchMap.of()
+    .case(EnumEnvironment.DEVELOPMENT, '/config/config.dev.js')
+    .case(EnumEnvironment.PRODUCTION, '/config/config.prod.js');
+var cssExtractFilename = SwitchMap.of()
+    .case(EnumEnvironment.DEVELOPMENT, '[name].css')
+    .case(EnumEnvironment.PRODUCTION, '[name].[chunkhash:8].css');
 var mergeDevServerConfig = function (devServerConfig) {
     if (devServerConfig === void 0) { devServerConfig = {}; }
     var DEFAULT_HOST = '127.0.0.1';
@@ -108,34 +128,10 @@ var mergeEntryConfig = function (entryConfig) {
 var mergeOutputConfig = function (env) { return function (outputConfig) {
     var DEFAULT_OUTPUT_CONFIG = {
         path: path_1.default.resolve(cwd, './build'),
-        filename: getBundledFilename(env),
+        filename: bundleFilename.get(env),
     };
     return outputConfig || DEFAULT_OUTPUT_CONFIG;
 }; };
-var getBundledFilename = function (env) {
-    switch (env) {
-        case EnumEnvironment.DEVELOPMENT:
-            return '[name].bundle.js';
-        case EnumEnvironment.PRODUCTION:
-            return '[name].bundle.[chunkhash:8].js';
-    }
-};
-var getConfigFilePath = function (env) {
-    switch (env) {
-        case EnumEnvironment.DEVELOPMENT:
-            return '/config/config.dev.js';
-        case EnumEnvironment.PRODUCTION:
-            return '/config/config.prod.js';
-    }
-};
-var getCssExtractFileName = function (env) {
-    switch (env) {
-        case EnumEnvironment.DEVELOPMENT:
-            return '[name].css';
-        case EnumEnvironment.PRODUCTION:
-            return '[name].[chunkhash:8].css';
-    }
-};
 var addCopyConfig = function (configs, copyConfig) {
     if (!fs_1.default.existsSync(path_1.default.resolve(copyConfig.from)))
         return;
@@ -173,7 +169,7 @@ var getConfig = function (ENV) { return __awaiter(void 0, void 0, void 0, functi
                     from: path_1.default.resolve(cwd, 'public/config'),
                     to: path_1.default.resolve(cwd, 'build/config'),
                 });
-                CONFIG_FILE_PATH = getConfigFilePath(ENV);
+                CONFIG_FILE_PATH = configFilePath.get(ENV);
                 plugins = [
                     new clean_webpack_plugin_1.CleanWebpackPlugin(),
                     new friendly_errors_webpack_plugin_1.default(),
@@ -185,7 +181,7 @@ var getConfig = function (ENV) { return __awaiter(void 0, void 0, void 0, functi
                         filename: 'index.html',
                     }),
                     new plugin_mini_css_extract_1.MiniCssExtractPlugin({
-                        filename: getCssExtractFileName(ENV),
+                        filename: cssExtractFilename.get(ENV),
                     }),
                 ];
                 if (COPY_CONFIG.length > 0) {
@@ -206,16 +202,16 @@ var getConfig = function (ENV) { return __awaiter(void 0, void 0, void 0, functi
                     },
                     module: {
                         rules: [
-                            js_loader_1.default,
-                            ts_loader_1.default,
-                            less_loader_1.LOADER_LESS_MODULE,
-                            less_loader_1.LOADER_LESS,
-                            sass_loader_1.LOADER_SASS,
-                            sass_loader_1.LOADER_SASS_MODULE,
-                            img_loader_1.default,
-                            font_loader_1.default,
-                            css_loader_1.LOADER_CSS,
-                            css_loader_1.LOADER_CSS_MODULE,
+                            loaders_1.LOADER_JS,
+                            loaders_1.LOADER_TS,
+                            loaders_1.LOADER_LESS_MODULE,
+                            loaders_1.LOADER_LESS,
+                            loaders_1.LOADER_SASS,
+                            loaders_1.LOADER_SASS_MODULE,
+                            loaders_1.LOADER_IMG,
+                            loaders_1.LOADER_FONT,
+                            loaders_1.LOADER_CSS,
+                            loaders_1.LOADER_CSS_MODULE,
                         ],
                     },
                     optimization: {
