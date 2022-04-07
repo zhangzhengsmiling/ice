@@ -8,7 +8,7 @@ import {
 import { MiniCssExtractPlugin } from './plugins/plugin-mini-css-extract';
 import CopyWebpackPlugin from 'copy-webpack-plugin';
 import FriendlyErrorsWebpackPlugin from 'friendly-errors-webpack-plugin';
-import { Configuration as DevServerConfiguration } from 'webpack-dev-server';
+import { Configuration, Configuration as DevServerConfiguration } from 'webpack-dev-server';
 import merge from 'webpack-merge';
 import CssMinimizerWebpackPlugin from 'css-minimizer-webpack-plugin';
 import TerserWebpackPlugin from 'terser-webpack-plugin';
@@ -40,6 +40,9 @@ class SwitchMap<ConditionType, ResultType> {
     return this._map.get(condition);
   }
 }
+
+type ConfigFunction =
+  (config: webpack.Configuration, options: { env: unknown }) => webpack.Configuration;
 
 export enum EnumEnvironment {
   PRODUCTION = 'production',
@@ -96,25 +99,24 @@ const addCopyConfig = (configs: ICopyConfig[], copyConfig: ICopyConfig) => {
   configs.push(copyConfig);
 };
 
-const getConfig = async (ENV: EnumEnvironment) => {
-  const decoratorKeyForList = (key: string) => {
-    return {
-      addKey: (list: { [key: string]: number }[]) => {
-        list.forEach((item, index) => {
-          item[key] = index;
-        });
-      },
-      removeKey: (list: { [key: string]: number }[]) => {
-        list.forEach((item) => {
-          delete item[key];
-        });
-      },
-    };
+const decoratorKeyForList = (key: string) => {
+  return {
+    addKey: (list: { [key: string]: number }[]) => {
+      list.forEach((item, index) => {
+        item[key] = index;
+      });
+    },
+    removeKey: (list: { [key: string]: number }[]) => {
+      list.forEach((item) => {
+        delete item[key];
+      });
+    },
   };
+};
 
+const getConfig = async (ENV: EnumEnvironment) => {
   const DOC_TITLE = 'title';
   const COPY_CONFIG: ICopyConfig[] = [];
-
   addCopyConfig(COPY_CONFIG, {
     from: path.resolve(cwd, 'public/imgs'),
     to: path.resolve(cwd, 'build/imgs'),
@@ -166,16 +168,16 @@ const getConfig = async (ENV: EnumEnvironment) => {
     },
     module: {
       rules: [
-        LOADER_JS,
-        LOADER_TS,
-        LOADER_LESS_MODULE,
-        LOADER_LESS,
-        LOADER_SASS,
-        LOADER_SASS_MODULE,
-        LOADER_IMG,
-        LOADER_FONT,
-        LOADER_CSS,
-        LOADER_CSS_MODULE,
+        LOADER_JS.getOptions(),
+        LOADER_TS.getOptions(),
+        LOADER_LESS_MODULE.getOptions(),
+        LOADER_LESS.getOptions(),
+        LOADER_SASS.getOptions(),
+        LOADER_SASS_MODULE.getOptions(),
+        LOADER_IMG.getOptions(),
+        LOADER_FONT.getOptions(),
+        LOADER_CSS.getOptions(),
+        LOADER_CSS_MODULE.getOptions(),
       ],
     },
     optimization: {
@@ -202,18 +204,21 @@ const getConfig = async (ENV: EnumEnvironment) => {
 
   // merge config
   let _config = null;
-  if (typeof customConfig === 'object') {
-    _config = merge({}, config, customConfig);
-    return _config;
-  } else if (typeof customConfig === 'function') {
-    addKey(config.module?.rules as { [key: string]: number }[]);
-    _config = (customConfig as (config: webpack.Configuration, options: { env: unknown }) => webpack.Configuration)(
-      config,
-      { env: process.env },
-    );
-    removeKey(config.module?.rules as { [key: string]: number }[]);
-    return _config;
-  }
+
+  return SwitchMap.of()
+    .case('object', merge({}, config, customConfig))
+    .case('function', (
+      () => {
+        addKey(config.module?.rules as { [key: string]: number }[]);
+        _config = (customConfig as ConfigFunction)(
+          config,
+          { env: process.env },
+        );
+        removeKey(config.module?.rules as { [key: string]: number }[]);
+        return _config;
+      }
+    )())
+    .get(typeof customConfig);
 };
 
 export default getConfig as (

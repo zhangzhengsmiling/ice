@@ -15,5 +15,4 @@ exports.LOADER_JS = Rule_1.default.of()
     options: {
         presets: ['@babel/preset-env', '@babel/preset-react'],
     }
-})
-    .getOptions();
+});

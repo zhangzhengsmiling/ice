@@ -13,12 +13,10 @@ export const LOADER_CSS_MODULE = Rule.of()
       module: true,
     },
   })
-  .use({ loader })
-  .getOptions();
+  .use({ loader });
 
 export const LOADER_CSS = Rule.of()
   .test(/(?<!\.module)\.css/)
   .include(path.resolve(cwd, 'src'))
   .use({ loader: 'css-loader' })
-  .use({ loader })
-  .getOptions();
+  .use({ loader });
