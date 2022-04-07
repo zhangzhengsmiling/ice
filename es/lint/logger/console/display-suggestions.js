@@ -9,9 +9,16 @@ var utils_1 = require("../../utils");
 var space = utils_1.logger.space;
 var displaySuggestions = function (msg) {
     var _a;
-    console.log("".concat(space(2)).concat(chalk_1.default.green('suggestions:')));
-    (_a = msg.suggestions) === null || _a === void 0 ? void 0 : _a.forEach(function (suggest) {
-        console.log(chalk_1.default.green("".concat(space(4)).concat((suggest.messageId, suggest.desc))));
-    });
+    var message = new Array()
+        .concat(space(2))
+        .concat(chalk_1.default.green('suggestions:'))
+        .join('');
+    console.log(message);
+    (_a = msg.suggestions) === null || _a === void 0 ? void 0 : _a.map(function (suggest) {
+        return new Array()
+            .concat(chalk_1.default.green(space(4)))
+            .concat(chalk_1.default.green(suggest.desc))
+            .join('');
+    }).map(console.log);
 };
 exports.displaySuggestions = displaySuggestions;

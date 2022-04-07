@@ -25,27 +25,17 @@ export const displayLintMessage = (options: IDisplayLintMessageOptions) => (lint
   console.log(chalk.underline(lintResult.filePath));
   lintResult.messages.forEach(msg => {
     if (msg.line && msg.column) {
-      console.log(
-        `${
-          space(2)
-        }${
-          displayRow(msg.line)
-        }${
-          chalk.gray(':')
-        }${
-          displayCol(msg.column)
-        }${
-          space(3)
-        }${
-          displaySeverity(msg.severity)
-        }${
-          space(3)
-        }${
-          padEnd(28, space(1))(chalk.gray(msg.messageId))
-        }${
-          chalk.gray(msg.message)
-        }`
-      );
+      const message = new Array<string>().concat(space(2))
+        .concat(displayRow(msg.line) as string)
+        .concat(chalk.gray(':'))
+        .concat(displayCol(msg.column) as string)
+        .concat(space(3))
+        .concat(displaySeverity(msg.severity) as string)
+        .concat(space(3))
+        .concat(padEnd(28, space(1))(chalk.gray(msg.messageId)))
+        .concat(chalk.gray(msg.message))
+        .join('');
+      console.log(message);
     }
     if(showSuggestion && msg.suggestions) {
       displaySuggestions(msg);

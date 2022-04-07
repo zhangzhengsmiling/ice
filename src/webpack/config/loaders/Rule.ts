@@ -33,7 +33,7 @@ export default class Rule {
     (this._options.exclude as Array<RuleCondition>).push(path);
     return this;
   }
-
+  // eslint-disable-next-line
   use(loader: any) {
     if (!this._options.use) this._options.use = [];
     (this._options.use as Array<RuleCondition>).unshift(loader);
