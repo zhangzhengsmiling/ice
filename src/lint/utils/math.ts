@@ -1,7 +1,7 @@
 
-export const max = (nums: number[]) => {
+export const max = (numbers: number[]) => {
   let _max = -Infinity;
-  nums.forEach(num => {
+  numbers.forEach(num => {
     _max = Math.max(num, _max);
   });
   return _max;

@@ -8,8 +8,7 @@ export const LOADER_SASS = Rule.of()
   .include(/\.module\.(sass|scss)$/)
   .use({ loader: 'sass-loader' })
   .use({ loader: 'css-loader', })
-  .use({ loader })
-  .getOptions();
+  .use({ loader });
 
 export const LOADER_SASS_MODULE = Rule.of()
   .test(/\.module\.(sass|scss)$/)
@@ -21,5 +20,4 @@ export const LOADER_SASS_MODULE = Rule.of()
       modules: true,
     },
   })
-  .use({ loader })
-  .getOptions();
+  .use({ loader });

@@ -8,8 +8,7 @@ export const LOADER_LESS = Rule.of()
   .include(path.resolve(cwd, 'src'))
   .use({ loader: 'less-loader' })
   .use({ loader: 'css-loader' })
-  .use({ loader })
-  .getOptions();
+  .use({ loader });
 
 export const LOADER_LESS_MODULE = Rule.of()
   .test(/\.module\.less$/)
@@ -21,5 +20,4 @@ export const LOADER_LESS_MODULE = Rule.of()
       modules: true,
     },
   })
-  .use({ loader })
-  .getOptions();
+  .use({ loader });

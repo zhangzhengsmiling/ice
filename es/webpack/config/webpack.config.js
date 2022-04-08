@@ -139,26 +139,25 @@ var addCopyConfig = function (configs, copyConfig) {
         return;
     configs.push(copyConfig);
 };
+var decoratorKeyForList = function (key) {
+    return {
+        addKey: function (list) {
+            list.forEach(function (item, index) {
+                item[key] = index;
+            });
+        },
+        removeKey: function (list) {
+            list.forEach(function (item) {
+                delete item[key];
+            });
+        },
+    };
+};
 var getConfig = function (ENV) { return __awaiter(void 0, void 0, void 0, function () {
-    var decoratorKeyForList, DOC_TITLE, COPY_CONFIG, CONFIG_FILE_PATH, plugins, config, _a, addKey, removeKey, customConfig, _config;
-    var _b, _c;
-    return __generator(this, function (_d) {
-        switch (_d.label) {
+    var DOC_TITLE, COPY_CONFIG, CONFIG_FILE_PATH, plugins, config, _a, addKey, removeKey, customConfig, _config, sm;
+    return __generator(this, function (_b) {
+        switch (_b.label) {
             case 0:
-                decoratorKeyForList = function (key) {
-                    return {
-                        addKey: function (list) {
-                            list.forEach(function (item, index) {
-                                item[key] = index;
-                            });
-                        },
-                        removeKey: function (list) {
-                            list.forEach(function (item) {
-                                delete item[key];
-                            });
-                        },
-                    };
-                };
                 DOC_TITLE = 'title';
                 COPY_CONFIG = [];
                 addCopyConfig(COPY_CONFIG, {
@@ -202,16 +201,16 @@ var getConfig = function (ENV) { return __awaiter(void 0, void 0, void 0, functi
                     },
                     module: {
                         rules: [
-                            loaders_1.LOADER_JS,
-                            loaders_1.LOADER_TS,
-                            loaders_1.LOADER_LESS_MODULE,
-                            loaders_1.LOADER_LESS,
-                            loaders_1.LOADER_SASS,
-                            loaders_1.LOADER_SASS_MODULE,
-                            loaders_1.LOADER_IMG,
-                            loaders_1.LOADER_FONT,
-                            loaders_1.LOADER_CSS,
-                            loaders_1.LOADER_CSS_MODULE,
+                            loaders_1.LOADER_JS.getOptions(),
+                            loaders_1.LOADER_TS.getOptions(),
+                            loaders_1.LOADER_LESS_MODULE.getOptions(),
+                            loaders_1.LOADER_LESS.getOptions(),
+                            loaders_1.LOADER_SASS.getOptions(),
+                            loaders_1.LOADER_SASS_MODULE.getOptions(),
+                            loaders_1.LOADER_IMG.getOptions(),
+                            loaders_1.LOADER_FONT.getOptions(),
+                            loaders_1.LOADER_CSS.getOptions(),
+                            loaders_1.LOADER_CSS_MODULE.getOptions(),
                         ],
                     },
                     optimization: {
@@ -233,19 +232,18 @@ var getConfig = function (ENV) { return __awaiter(void 0, void 0, void 0, functi
                 _a = decoratorKeyForList('_key'), addKey = _a.addKey, removeKey = _a.removeKey;
                 return [4 /*yield*/, Promise.resolve().then(function () { return __importStar(require(path_1.default.resolve(process.cwd(), 'ice.config.js'))); }).then(function (module) { return module.default; })];
             case 1:
-                customConfig = _d.sent();
+                customConfig = _b.sent();
                 _config = null;
-                if (typeof customConfig === 'object') {
-                    _config = (0, webpack_merge_1.default)({}, config, customConfig);
-                    return [2 /*return*/, _config];
-                }
-                else if (typeof customConfig === 'function') {
-                    addKey((_b = config.module) === null || _b === void 0 ? void 0 : _b.rules);
+                sm = SwitchMap.of()
+                    .case('object', (0, webpack_merge_1.default)({}, config, customConfig))
+                    .case('function', (function () {
+                    var _a, _b;
+                    addKey((_a = config.module) === null || _a === void 0 ? void 0 : _a.rules);
                     _config = customConfig(config, { env: process.env });
-                    removeKey((_c = config.module) === null || _c === void 0 ? void 0 : _c.rules);
-                    return [2 /*return*/, _config];
-                }
-                return [2 /*return*/];
+                    removeKey((_b = config.module) === null || _b === void 0 ? void 0 : _b.rules);
+                    return _config;
+                })());
+                return [2 /*return*/, sm.get(typeof customConfig)];
         }
     });
 }); };

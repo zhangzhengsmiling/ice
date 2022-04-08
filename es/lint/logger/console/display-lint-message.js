@@ -23,7 +23,17 @@ var displayLintMessage = function (options) { return function (lintResult) {
     console.log(chalk_1.default.underline(lintResult.filePath));
     lintResult.messages.forEach(function (msg) {
         if (msg.line && msg.column) {
-            console.log("".concat(space(2)).concat(displayRow(msg.line)).concat(chalk_1.default.gray(':')).concat(displayCol(msg.column)).concat(space(3)).concat(displaySeverity(msg.severity)).concat(space(3)).concat(padEnd(28, space(1))(chalk_1.default.gray(msg.messageId))).concat(chalk_1.default.gray(msg.message)));
+            var message = new Array().concat(space(2))
+                .concat(displayRow(msg.line))
+                .concat(chalk_1.default.gray(':'))
+                .concat(displayCol(msg.column))
+                .concat(space(3))
+                .concat(displaySeverity(msg.severity))
+                .concat(space(3))
+                .concat(padEnd(28, space(1))(chalk_1.default.gray(msg.messageId)))
+                .concat(chalk_1.default.gray(msg.message))
+                .join('');
+            console.log(message);
         }
         if (showSuggestion && msg.suggestions) {
             (0, display_suggestions_1.displaySuggestions)(msg);

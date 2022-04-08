@@ -7,5 +7,4 @@ exports.LOADER_IMG = void 0;
 var Rule_1 = __importDefault(require("./Rule"));
 exports.LOADER_IMG = Rule_1.default.of()
     .test(/\.(png|jpe?g|gif)$/i)
-    .use('file-loader')
-    .getOptions();
+    .use('file-loader');

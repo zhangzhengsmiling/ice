@@ -1,9 +1,9 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.max = void 0;
-var max = function (nums) {
+var max = function (numbers) {
     var _max = -Infinity;
-    nums.forEach(function (num) {
+    numbers.forEach(function (num) {
         _max = Math.max(num, _max);
     });
     return _max;

@@ -7,5 +7,4 @@ exports.LOADER_FONT = void 0;
 var Rule_1 = __importDefault(require("./Rule"));
 exports.LOADER_FONT = Rule_1.default.of()
     .test(/\.(woff|woff2|eot|ttf|svg)$/)
-    .use('url-loader?limit=100000')
-    .getOptions();
+    .use('url-loader?limit=100000');

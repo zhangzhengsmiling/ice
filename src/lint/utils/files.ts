@@ -35,6 +35,11 @@ export const readFilesOfDir = (dirPath: string) => {
   return _read([], dirPath);
 };
 
+/**
+ * 根据扩展名和文件名进行文件搜索
+ * 以extensions列表分别与文件名拼接，然后进行文件匹配，如果存在，则返回文件的绝对路径
+ * (extensions: 扩展名列表) -> (filename: 文件名称) -> string 
+ */
 export const resolveFiles = (extensions: string[]) => {
   return (filename: string) => {
     let result: string | null = null;

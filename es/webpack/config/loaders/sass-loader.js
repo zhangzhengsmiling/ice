@@ -13,8 +13,7 @@ exports.LOADER_SASS = Rule_1.default.of()
     .include(/\.module\.(sass|scss)$/)
     .use({ loader: 'sass-loader' })
     .use({ loader: 'css-loader', })
-    .use({ loader: plugin_mini_css_extract_1.loader })
-    .getOptions();
+    .use({ loader: plugin_mini_css_extract_1.loader });
 exports.LOADER_SASS_MODULE = Rule_1.default.of()
     .test(/\.module\.(sass|scss)$/)
     .include(path_1.default.resolve(cwd, 'src'))
@@ -25,5 +24,4 @@ exports.LOADER_SASS_MODULE = Rule_1.default.of()
         modules: true,
     },
 })
-    .use({ loader: plugin_mini_css_extract_1.loader })
-    .getOptions();
+    .use({ loader: plugin_mini_css_extract_1.loader });

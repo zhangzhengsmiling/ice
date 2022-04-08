@@ -17,11 +17,9 @@ exports.LOADER_CSS_MODULE = Rule_1.default.of()
         module: true,
     },
 })
-    .use({ loader: plugin_mini_css_extract_1.loader })
-    .getOptions();
+    .use({ loader: plugin_mini_css_extract_1.loader });
 exports.LOADER_CSS = Rule_1.default.of()
     .test(/(?<!\.module)\.css/)
     .include(path_1.default.resolve(cwd, 'src'))
     .use({ loader: 'css-loader' })
-    .use({ loader: plugin_mini_css_extract_1.loader })
-    .getOptions();
+    .use({ loader: plugin_mini_css_extract_1.loader });

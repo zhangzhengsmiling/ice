@@ -30,6 +30,7 @@ var Rule = /** @class */ (function () {
         this._options.exclude.push(path);
         return this;
     };
+    // eslint-disable-next-line
     Rule.prototype.use = function (loader) {
         if (!this._options.use)
             this._options.use = [];
