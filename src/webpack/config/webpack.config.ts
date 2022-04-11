@@ -8,7 +8,7 @@ import {
 import { MiniCssExtractPlugin } from './plugins/plugin-mini-css-extract';
 import CopyWebpackPlugin from 'copy-webpack-plugin';
 import FriendlyErrorsWebpackPlugin from 'friendly-errors-webpack-plugin';
-import { Configuration, Configuration as DevServerConfiguration } from 'webpack-dev-server';
+import { Configuration as DevServerConfiguration } from 'webpack-dev-server';
 import merge from 'webpack-merge';
 import CssMinimizerWebpackPlugin from 'css-minimizer-webpack-plugin';
 import TerserWebpackPlugin from 'terser-webpack-plugin';
@@ -17,6 +17,7 @@ import webpackDevServer from 'webpack-dev-server';
 import HtmlWebpackPlugin from 'html-webpack-plugin';
 import { CleanWebpackPlugin } from 'clean-webpack-plugin';
 const cwd = process.cwd();
+declare type FnIIFE = (...args: any) => any;
 
 class SwitchMap<ConditionType, ResultType> {
 
@@ -200,24 +201,27 @@ const getConfig = async (ENV: EnumEnvironment) => {
 
   const { addKey, removeKey } = decoratorKeyForList('_key');
 
-  const customConfig = await import(path.resolve(process.cwd(), 'ice.config.js')).then((module) => module.default);
+  const customConfig = await import(path.resolve(process.cwd(), 'ice.config.js'))
+    .then((module) => module.default);
+
+  const iife = (fn: FnIIFE, ...args: any[]) => {
+    return fn(...args);
+  }
 
   // merge config
   let _config = null;
 
   return SwitchMap.of()
     .case('object', merge({}, config, customConfig))
-    .case('function', (
-      () => {
-        addKey(config.module?.rules as { [key: string]: number }[]);
-        _config = (customConfig as ConfigFunction)(
-          config,
-          { env: process.env },
-        );
-        removeKey(config.module?.rules as { [key: string]: number }[]);
-        return _config;
-      }
-    )())
+    .case('function', iife(() => {
+      addKey(config.module?.rules as { [key: string]: number }[]);
+      _config = (customConfig as ConfigFunction)(
+        config,
+        { env: process.env },
+      );
+      removeKey(config.module?.rules as { [key: string]: number }[]);
+      return _config;
+    }))
     .get(typeof customConfig);
 };
 

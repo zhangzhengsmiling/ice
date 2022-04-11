@@ -66,9 +66,7 @@ var dev = function () { return __awaiter(void 0, void 0, void 0, function () {
     var config, compiler, devServer;
     return __generator(this, function (_a) {
         switch (_a.label) {
-            case 0:
-                console.log('before dev...');
-                return [4 /*yield*/, (0, webpack_config_1.default)(MODE)];
+            case 0: return [4 /*yield*/, (0, webpack_config_1.default)(MODE)];
             case 1:
                 config = _a.sent();
                 config.mode = MODE;

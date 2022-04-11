@@ -154,7 +154,7 @@ var decoratorKeyForList = function (key) {
     };
 };
 var getConfig = function (ENV) { return __awaiter(void 0, void 0, void 0, function () {
-    var DOC_TITLE, COPY_CONFIG, CONFIG_FILE_PATH, plugins, config, _a, addKey, removeKey, customConfig, _config, sm;
+    var DOC_TITLE, COPY_CONFIG, CONFIG_FILE_PATH, plugins, config, _a, addKey, removeKey, customConfig, iife, _config;
     return __generator(this, function (_b) {
         switch (_b.label) {
             case 0:
@@ -233,17 +233,24 @@ var getConfig = function (ENV) { return __awaiter(void 0, void 0, void 0, functi
                 return [4 /*yield*/, Promise.resolve().then(function () { return __importStar(require(path_1.default.resolve(process.cwd(), 'ice.config.js'))); }).then(function (module) { return module.default; })];
             case 1:
                 customConfig = _b.sent();
+                iife = function (fn) {
+                    var args = [];
+                    for (var _i = 1; _i < arguments.length; _i++) {
+                        args[_i - 1] = arguments[_i];
+                    }
+                    return fn.apply(void 0, args);
+                };
                 _config = null;
-                sm = SwitchMap.of()
-                    .case('object', (0, webpack_merge_1.default)({}, config, customConfig))
-                    .case('function', (function () {
-                    var _a, _b;
-                    addKey((_a = config.module) === null || _a === void 0 ? void 0 : _a.rules);
-                    _config = customConfig(config, { env: process.env });
-                    removeKey((_b = config.module) === null || _b === void 0 ? void 0 : _b.rules);
-                    return _config;
-                })());
-                return [2 /*return*/, sm.get(typeof customConfig)];
+                return [2 /*return*/, SwitchMap.of()
+                        .case('object', (0, webpack_merge_1.default)({}, config, customConfig))
+                        .case('function', iife(function () {
+                        var _a, _b;
+                        addKey((_a = config.module) === null || _a === void 0 ? void 0 : _a.rules);
+                        _config = customConfig(config, { env: process.env });
+                        removeKey((_b = config.module) === null || _b === void 0 ? void 0 : _b.rules);
+                        return _config;
+                    }))
+                        .get(typeof customConfig)];
         }
     });
 }); };
