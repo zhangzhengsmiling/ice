@@ -9,6 +9,7 @@ import { compose } from './utils';
 import start from './webpack/dev';
 import build from './webpack/build';
 import init from './init';
+import ci from './ci';
 
 const toString = (buffer: Buffer) => buffer.toString();
 const resolveCwd = (cwd: string) => (filename: string) => path.resolve(cwd, filename);
@@ -50,9 +51,18 @@ const initCommand = new Command('init')
   .argument('name', 'name of project')
   .action(init);
 
+const ciCommand = new Command('ci')
+  .description('ci scripts toolkit')
+  .option('--husky')
+  .option('--commitlint')
+  .option('--commitizen')
+  .option('--standard-version')
+  .action(ci);
+
 registrySubCommand(program, devCommand);
 registrySubCommand(program, buildCommand);
 registrySubCommand(program, lintCommand);
 registrySubCommand(program, initCommand);
+registrySubCommand(program, ciCommand);
 
 program.parse(process.argv);
