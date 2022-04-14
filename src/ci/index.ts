@@ -22,7 +22,7 @@ const ci = (options: IOptions) => {
     .filter(Boolean)
     .forEach(async (task) => {
       await task!();
-    })
+    });
 };
 
 export default ci;
