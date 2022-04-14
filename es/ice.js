@@ -13,6 +13,7 @@ var utils_1 = require("./utils");
 var dev_1 = __importDefault(require("./webpack/dev"));
 var build_1 = __importDefault(require("./webpack/build"));
 var init_1 = __importDefault(require("./init"));
+var ci_1 = __importDefault(require("./ci"));
 var toString = function (buffer) { return buffer.toString(); };
 var resolveCwd = function (cwd) { return function (filename) { return path_1.default.resolve(cwd, filename); }; };
 var getPkgByFilename = (0, utils_1.compose)(JSON.parse, toString, fs_1.default.readFileSync, resolveCwd(path_1.default.resolve(__dirname, '../')));
@@ -41,8 +42,16 @@ var lintCommand = new commander_1.Command('lint')
 var initCommand = new commander_1.Command('init')
     .argument('name', 'name of project')
     .action(init_1.default);
+var ciCommand = new commander_1.Command('ci')
+    .description('ci scripts toolkit')
+    .option('--husky')
+    .option('--commitlint')
+    .option('--commitizen')
+    .option('--standard-version')
+    .action(ci_1.default);
 registrySubCommand(commander_1.program, devCommand);
 registrySubCommand(commander_1.program, buildCommand);
 registrySubCommand(commander_1.program, lintCommand);
 registrySubCommand(commander_1.program, initCommand);
+registrySubCommand(commander_1.program, ciCommand);
 commander_1.program.parse(process.argv);

@@ -8,7 +8,7 @@ import {
 import { MiniCssExtractPlugin } from './plugins/plugin-mini-css-extract';
 import CopyWebpackPlugin from 'copy-webpack-plugin';
 import FriendlyErrorsWebpackPlugin from 'friendly-errors-webpack-plugin';
-import { Configuration, Configuration as DevServerConfiguration } from 'webpack-dev-server';
+import { Configuration as DevServerConfiguration } from 'webpack-dev-server';
 import merge from 'webpack-merge';
 import CssMinimizerWebpackPlugin from 'css-minimizer-webpack-plugin';
 import TerserWebpackPlugin from 'terser-webpack-plugin';
@@ -16,30 +16,8 @@ import webpack from 'webpack';
 import webpackDevServer from 'webpack-dev-server';
 import HtmlWebpackPlugin from 'html-webpack-plugin';
 import { CleanWebpackPlugin } from 'clean-webpack-plugin';
+import { SwitchCase } from '../../utils';
 const cwd = process.cwd();
-
-class SwitchMap<ConditionType, ResultType> {
-
-  _map: Map<ConditionType, ResultType>;
-
-  constructor(map: Map<ConditionType, ResultType>) {
-    this._map = map;
-  }
-
-  static of<ConditionType, ResultType>() {
-    return new SwitchMap(new Map<ConditionType, ResultType>());
-  }
-
-  case(condition: ConditionType, result: ResultType) {
-    const _map = new Map(this._map);
-    _map.set(condition, result);
-    return new SwitchMap(_map);
-  }
-
-  get(condition: ConditionType) {
-    return this._map.get(condition);
-  }
-}
 
 type ConfigFunction =
   (config: webpack.Configuration, options: { env: unknown }) => webpack.Configuration;
@@ -54,15 +32,15 @@ interface ICopyConfig {
   to: string;
 }
 
-const bundleFilename = SwitchMap.of<EnumEnvironment, string>()
+const bundleFilename = SwitchCase.of<EnumEnvironment, string>()
   .case(EnumEnvironment.DEVELOPMENT, '[name].bundle.js')
   .case(EnumEnvironment.PRODUCTION, '[name].bundle.[chunkhash:8].js');
 
-const configFilePath = SwitchMap.of<EnumEnvironment, string>()
+const configFilePath = SwitchCase.of<EnumEnvironment, string>()
   .case(EnumEnvironment.DEVELOPMENT, '/config/config.dev.js')
   .case(EnumEnvironment.PRODUCTION, '/config/config.prod.js');
 
-const cssExtractFilename = SwitchMap.of<EnumEnvironment, string>()
+const cssExtractFilename = SwitchCase.of<EnumEnvironment, string>()
   .case(EnumEnvironment.DEVELOPMENT, '[name].css')
   .case(EnumEnvironment.PRODUCTION, '[name].[chunkhash:8].css');
 
@@ -88,7 +66,7 @@ const mergeEntryConfig = (entryConfig?: webpack.Entry) => {
 const mergeOutputConfig = (env: EnumEnvironment) => (outputConfig?: object) => {
   const DEFAULT_OUTPUT_CONFIG = {
     path: path.resolve(cwd, './build'),
-    filename: bundleFilename.get(env),
+    filename: bundleFilename.switch(env),
   };
   return outputConfig || DEFAULT_OUTPUT_CONFIG;
 };
@@ -127,7 +105,7 @@ const getConfig = async (ENV: EnumEnvironment) => {
     to: path.resolve(cwd, 'build/config'),
   });
 
-  const CONFIG_FILE_PATH = configFilePath.get(ENV);
+  const CONFIG_FILE_PATH = configFilePath.switch(ENV);
   const plugins: (
     CleanWebpackPlugin |
     HtmlWebpackPlugin |
@@ -145,7 +123,7 @@ const getConfig = async (ENV: EnumEnvironment) => {
       filename: 'index.html',
     }),
     new MiniCssExtractPlugin({
-      filename: cssExtractFilename.get(ENV),
+      filename: cssExtractFilename.switch(ENV),
     }),
   ];
 
@@ -205,7 +183,7 @@ const getConfig = async (ENV: EnumEnvironment) => {
   // merge config
   let _config = null;
 
-  return SwitchMap.of()
+  return SwitchCase.of()
     .case('object', merge({}, config, customConfig))
     .case('function', (
       () => {
@@ -218,7 +196,7 @@ const getConfig = async (ENV: EnumEnvironment) => {
         return _config;
       }
     )())
-    .get(typeof customConfig);
+    .switch(typeof customConfig);
 };
 
 export default getConfig as (

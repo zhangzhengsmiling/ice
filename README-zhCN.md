@@ -34,9 +34,9 @@
    ├── ice.config.js
    ├── package.json
    ├── public
-   │   └── index.html
+   │   └── index.html
    ├── src
-   │   └── index.tsx
+   │   └── index.tsx
    └── yarn.lock
    ```
 
@@ -69,7 +69,7 @@
    /*eslint-env node*/
    const path = require('path')
    const { merge } = require('webpack-merge')
-
+   
    module.exports = (config) => {
      console.log(config)
      const _config = {
@@ -79,7 +79,7 @@
          filename: 'bundle.[chunkhash:8].js',
        },
      }
-
+   
      return merge(config, _config)
    }
    ```
@@ -89,7 +89,9 @@
 下面是一些可运行的脚本
 
 ### ice init
+
 初始化项目，下载模板工程，模板工程已经集成ice。详细可查看模板库：[https://github.com/zhangzhengsmiling/react-template](https://github.com/zhangzhengsmiling/react-template)
+
 ### ice dev
 
 启动webpack dev server。类似于`webpack serve`, 内部用的是babel-loader编译ts代码，因此可能不会进行类型检查报错，你可以尝试通过`tsc --watch`进行类型检查。
@@ -102,3 +104,40 @@
 
 与eslint类似，对于一些eslint的配置进行封装
 你可以尝试运行`ice lint src --ext .tsx,.ts`进行lint校验
+
+### ice ci [options]
+
+`ci`命令可以帮助我们快速构建工程化项目，husky，commitizen等工程化环境可以通过脚本快速构建，一键安装依赖，并配置相关文件
+
+#### 目前支持的工程化配置如下：
+
+- --husky
+- --commitizen
+- --commitlint
+- --standard-version
+
+#### 1. ice ci --husky
+
+- 判断package.json中的dependencies和devDependencies中是否已有husky，如果有，跳过后续流程并给出tips提示
+- 如果没有安装过，则会去安装`husky@4.3.6`,然后在package.json中配置husky hook。请确保package.json中没有husky字段，不然一样会跳过写入hook的流程（这块暂时还没有做优化）
+
+*注意*：为什么安装husky的版本是4.3.6的，因为husky版本5.0以上好像hooks配置是在.husky文件夹中配置的，导致在package.json中配置的hook无效，暂时脚本还没有升级支持5.0以上。如果要用5.0以上的husky版本，具体配置方式可以去官方文档找下。
+
+#### 2. ice ci --commizien
+
+- 首先会去pacakge.json查找config字段，如果存在，会认为已经配置了commitizen，就会跳过后面的流程
+- 如果没有，就会开始安装`commitizen`、`cz-conventional-changelog`依赖，并在package.json中写入config字段
+
+#### 3. ice ci --commitlint
+
+- 安装`@commitlint/config-conventional`、`@commitlint/cli`
+- 在工作目录中创建.commitlintrc.js文件
+
+#### 4. ice ci --standard-version
+
+- 安装`standard-version`依赖
+- 在package.json的scripts字段里加入release脚本，如果release脚本占用了，可以手动添加脚本
+
+#### 注意：
+
+以上涉及修改package.json的脚本（commizen/husky/standard-version）,设计到json序列化成对象，可能会导致packages.json里面字段排序按照字典序重排。
