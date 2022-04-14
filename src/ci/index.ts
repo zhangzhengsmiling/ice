@@ -9,7 +9,6 @@ interface IOptions {
 }
 
 const ci = (options: IOptions) => {
-  console.log(options);
   const ciSwitchCase = SwitchCase.of<keyof IOptions, () => Promise<void>>()
     .case('husky', husky)
     .case('commitlint', commitlint)

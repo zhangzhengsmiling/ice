@@ -34,9 +34,9 @@ It is useful when you are going to create a demo project.I do not want to create
    ├── ice.config.js
    ├── package.json
    ├── public
-   │   └── index.html
+   │   └── index.html
    ├── src
-   │   └── index.tsx
+   │   └── index.tsx
    └── yarn.lock
    ```
 
@@ -69,7 +69,7 @@ It is useful when you are going to create a demo project.I do not want to create
    /*eslint-env node*/
    const path = require('path')
    const { merge } = require('webpack-merge')
-
+   
    module.exports = (config) => {
      console.log(config)
      const _config = {
@@ -79,7 +79,7 @@ It is useful when you are going to create a demo project.I do not want to create
          filename: 'bundle.[chunkhash:8].js',
        },
      }
-
+   
      return merge(config, _config)
    }
    ```
@@ -89,6 +89,7 @@ It is useful when you are going to create a demo project.I do not want to create
 Here are some scripts that has been integrated to `ice`. You can use the following scripts when you have installed `ice`. Here are some scripts listed briefly(Of course, you can run script `ice --help` to get detailed information.):
 
 ### ice init
+
 You can download template project by running this script which is integrated with ice tools. More reference: [https://github.com/zhangzhengsmiling/react-template](https://github.com/zhangzhengsmiling/react-template)
 
 ### ice dev
@@ -104,3 +105,48 @@ A script to build you project. You can write your own config files in `ice.confi
 Lint script, it can be used just like `eslint`, and it encapsulates some eslint config.
 
 You can run eslint by script, `ice lint src --ext .tsx,.ts`.Besides you can get more details by running `ice lint --help`.
+
+### ice ci [options]
+
+`ci` script provides toolkit for front end engineering. 
+
+#### SUPPORT LIST:
+
+- --husky
+
+- --commitizen
+
+- --commitlint
+
+- --standard-version
+
+Here are some options you can pass to the command (also you can get more information by `ice ci -h`):
+
+#### 1. ice ci --husky
+
+- First, it will chekout whether there is 'husky' fileld in your package.json.If so, it will skip whithout installing dependencies or writing 'commit-msg'
+- If you have nerver installed `husky`, it will install `husky@4.3.6` by yarn.
+- Then, it will writing `commit-msg` hook to your package.json, and please make sure you have installed commitment by `ice ci --commitilint` or manually.
+
+*NOTES:* The version of husky is 4.3.6, and it maybe cause errors by upgrade to 5.0. If you want to use husky of higher version, maybe you can turn to official document for help.
+
+#### 2. ice ci --commitizen
+
+- First, it will checkout whether there is 'config' filed in your package.json.If so, it will skip too.
+- If not, it will instlall `commitizen` and `cz-conventional-changelog` and writing config of `commitizen` to your package.json.
+- Then you can run `git cz` for testing.
+
+#### 3. ice ci --commitlint
+
+- It will install packages directly, `@commitlint/config-conventional` and `@commitlint/cli`.
+- And Then it will create '.commitlinttc.js' file on your word directory.
+
+#### 4. ice ci --standard-version
+
+- First, it will install packages, `standard-version`
+- And add script 'release: yarn standard-version' to the field 'scripts' of your packages.json.
+- If 'release' field has already been used, you can add manually.
+
+#### NOTES：
+
+Scripts of all may cause the fields of package.json sorting again. Because, it may convert json string into object, and then  it will parse object into json string.
