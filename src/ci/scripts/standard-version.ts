@@ -10,10 +10,14 @@ const standardVersion = async () => {
 
   installPackages(['standard-version'], ['-D']);
 
-  const pkg = await import(pathPkg);
+  const pkgModule = await import(pathPkg);
+  const pkg = pkgModule.default;
   if(!pkg.scripts)
     pkg.scripts = {};
-  pkg.scripts.release = 'yarn standard-version';
+  if (!pkg.scripts.release)
+    pkg.scripts.release = 'yarn standard-version';
+  else
+    console.log('release命令已被占用，可手动添加script，`yarn standard-version`');
   fs.writeFileSync(pathPkg, jsonStringify(pkg));
 };
 

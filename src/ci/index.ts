@@ -5,7 +5,7 @@ interface IOptions {
   husky: boolean;
   commitizen: boolean;
   commitlint: boolean;
-  "standard-version": boolean;
+  standardVersion: boolean;
 }
 
 const ci = (options: IOptions) => {
@@ -14,11 +14,15 @@ const ci = (options: IOptions) => {
     .case('husky', husky)
     .case('commitlint', commitlint)
     .case('commitizen', commitizen)
-    .case('standard-version', standardVersion);
-
-  (Object.keys(options) as (keyof IOptions)[])
+    .case('standardVersion', standardVersion);
+  const tasks = (Object.keys(options) as (keyof IOptions)[])
     .filter(props)
-    .map(ciSwitchCase.switch);
+    .map(ciSwitchCase.switch.bind(ciSwitchCase));
+  tasks
+    .filter(Boolean)
+    .forEach(async (task) => {
+      await task!();
+    })
 };
 
 export default ci;
