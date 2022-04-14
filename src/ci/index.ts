@@ -1,5 +1,5 @@
 import { SwitchCase } from '../utils';
-import { commitlint, standardVersion, commitizen, husky } from './scripts'
+import { commitlint, standardVersion, commitizen, husky } from './scripts';
 const props = <T>(key: keyof T) => (obj: T) => obj[key];
 interface IOptions {
   husky: boolean;
