@@ -81,36 +81,20 @@ var css_minimizer_webpack_plugin_1 = __importDefault(require("css-minimizer-webp
 var terser_webpack_plugin_1 = __importDefault(require("terser-webpack-plugin"));
 var html_webpack_plugin_1 = __importDefault(require("html-webpack-plugin"));
 var clean_webpack_plugin_1 = require("clean-webpack-plugin");
+var utils_1 = require("../../utils");
 var cwd = process.cwd();
-var SwitchMap = /** @class */ (function () {
-    function SwitchMap(map) {
-        this._map = map;
-    }
-    SwitchMap.of = function () {
-        return new SwitchMap(new Map());
-    };
-    SwitchMap.prototype.case = function (condition, result) {
-        var _map = new Map(this._map);
-        _map.set(condition, result);
-        return new SwitchMap(_map);
-    };
-    SwitchMap.prototype.get = function (condition) {
-        return this._map.get(condition);
-    };
-    return SwitchMap;
-}());
 var EnumEnvironment;
 (function (EnumEnvironment) {
     EnumEnvironment["PRODUCTION"] = "production";
     EnumEnvironment["DEVELOPMENT"] = "development";
 })(EnumEnvironment = exports.EnumEnvironment || (exports.EnumEnvironment = {}));
-var bundleFilename = SwitchMap.of()
+var bundleFilename = utils_1.SwitchCase.of()
     .case(EnumEnvironment.DEVELOPMENT, '[name].bundle.js')
     .case(EnumEnvironment.PRODUCTION, '[name].bundle.[chunkhash:8].js');
-var configFilePath = SwitchMap.of()
+var configFilePath = utils_1.SwitchCase.of()
     .case(EnumEnvironment.DEVELOPMENT, '/config/config.dev.js')
     .case(EnumEnvironment.PRODUCTION, '/config/config.prod.js');
-var cssExtractFilename = SwitchMap.of()
+var cssExtractFilename = utils_1.SwitchCase.of()
     .case(EnumEnvironment.DEVELOPMENT, '[name].css')
     .case(EnumEnvironment.PRODUCTION, '[name].[chunkhash:8].css');
 var mergeDevServerConfig = function (devServerConfig) {
@@ -128,7 +112,7 @@ var mergeEntryConfig = function (entryConfig) {
 var mergeOutputConfig = function (env) { return function (outputConfig) {
     var DEFAULT_OUTPUT_CONFIG = {
         path: path_1.default.resolve(cwd, './build'),
-        filename: bundleFilename.get(env),
+        filename: bundleFilename.switch(env),
     };
     return outputConfig || DEFAULT_OUTPUT_CONFIG;
 }; };
@@ -168,7 +152,7 @@ var getConfig = function (ENV) { return __awaiter(void 0, void 0, void 0, functi
                     from: path_1.default.resolve(cwd, 'public/config'),
                     to: path_1.default.resolve(cwd, 'build/config'),
                 });
-                CONFIG_FILE_PATH = configFilePath.get(ENV);
+                CONFIG_FILE_PATH = configFilePath.switch(ENV);
                 plugins = [
                     new clean_webpack_plugin_1.CleanWebpackPlugin(),
                     new friendly_errors_webpack_plugin_1.default(),
@@ -180,7 +164,7 @@ var getConfig = function (ENV) { return __awaiter(void 0, void 0, void 0, functi
                         filename: 'index.html',
                     }),
                     new plugin_mini_css_extract_1.MiniCssExtractPlugin({
-                        filename: cssExtractFilename.get(ENV),
+                        filename: cssExtractFilename.switch(ENV),
                     }),
                 ];
                 if (COPY_CONFIG.length > 0) {
@@ -234,7 +218,7 @@ var getConfig = function (ENV) { return __awaiter(void 0, void 0, void 0, functi
             case 1:
                 customConfig = _b.sent();
                 _config = null;
-                return [2 /*return*/, SwitchMap.of()
+                return [2 /*return*/, utils_1.SwitchCase.of()
                         .case('object', (0, webpack_merge_1.default)({}, config, customConfig))
                         .case('function', (function () {
                         var _a, _b;
@@ -243,7 +227,7 @@ var getConfig = function (ENV) { return __awaiter(void 0, void 0, void 0, functi
                         removeKey((_b = config.module) === null || _b === void 0 ? void 0 : _b.rules);
                         return _config;
                     })())
-                        .get(typeof customConfig)];
+                        .switch(typeof customConfig)];
         }
     });
 }); };

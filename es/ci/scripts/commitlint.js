@@ -35,30 +35,22 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
-Object.defineProperty(exports, "__esModule", { value: true });
-var utils_1 = require("../utils");
-var scripts_1 = require("./scripts");
-var props = function (key) { return function (obj) { return obj[key]; }; };
-var ci = function (options) {
-    var ciSwitchCase = utils_1.SwitchCase.of()
-        .case('husky', scripts_1.husky)
-        .case('commitlint', scripts_1.commitlint)
-        .case('commitizen', scripts_1.commitizen)
-        .case('standardVersion', scripts_1.standardVersion);
-    var tasks = Object.keys(options)
-        .filter(props)
-        .map(ciSwitchCase.switch.bind(ciSwitchCase));
-    tasks
-        .filter(Boolean)
-        .forEach(function (task) { return __awaiter(void 0, void 0, void 0, function () {
-        return __generator(this, function (_a) {
-            switch (_a.label) {
-                case 0: return [4 /*yield*/, task()];
-                case 1:
-                    _a.sent();
-                    return [2 /*return*/];
-            }
-        });
-    }); });
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
 };
-exports.default = ci;
+Object.defineProperty(exports, "__esModule", { value: true });
+var fs_1 = __importDefault(require("fs"));
+var path_1 = __importDefault(require("path"));
+var install_packages_1 = __importDefault(require("../common/install-packages"));
+var commitlint = function () { return __awaiter(void 0, void 0, void 0, function () {
+    var workspace, commitlintTempl, dest;
+    return __generator(this, function (_a) {
+        (0, install_packages_1.default)(['@commitlint/config-conventional', '@commitlint/cli'], ['-D']);
+        workspace = process.cwd();
+        commitlintTempl = fs_1.default.readFileSync(path_1.default.resolve(__dirname, '../templates/.commitlint.templ.js')).toString();
+        dest = "".concat(workspace, "/.commitlintrc.js");
+        fs_1.default.writeFileSync(dest, commitlintTempl);
+        return [2 /*return*/];
+    });
+}); };
+exports.default = commitlint;

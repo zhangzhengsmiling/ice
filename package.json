@@ -70,7 +70,7 @@
     "release:major": "standard-version --release-as major",
     "release:alpha": "standard-version --prerelease alpha",
     "release:beta": "standard-version --prerelease beta",
-    "publish": "yarn build && npm publish --registry=https://registry.npmmirror.com"
+    "publish": "yarn build && npm publish --registry=https://registry.npmjs.org"
   },
   "bin": {
     "ice": "es/ice.js"
