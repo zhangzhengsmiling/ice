@@ -2,6 +2,21 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.1.0](https://github.com/zhangzhengsmiling/ice/compare/v1.0.9...v1.1.0) (2022-05-12)
+
+
+### Features
+
+* add ci scripts ([a156ded](https://github.com/zhangzhengsmiling/ice/commit/a156ded0341274540d7472d33339ce5fbb3184a3))
+* add scripts for engineered frontend ([3b7c3e9](https://github.com/zhangzhengsmiling/ice/commit/3b7c3e9986cacbb0208cfc42e69f8e604ba20849))
+* eslint enhancement ([8afb1c8](https://github.com/zhangzhengsmiling/ice/commit/8afb1c8aca7f021af653e9963299f95f43d4eeec))
+
+
+### Bug Fixes
+
+* fix bug, dynamic import json file ([4a8a2e0](https://github.com/zhangzhengsmiling/ice/commit/4a8a2e0419e41441a5b319c7755f1ba726700eab))
+* fix eslint ignore ([297c526](https://github.com/zhangzhengsmiling/ice/commit/297c52628c91a86bd6c7421c30455c0dc5e70129))
+
 ### [1.0.9](https://github.com/zhangzhengsmiling/ice/compare/v1.0.7...v1.0.9) (2022-03-30)
 
 
