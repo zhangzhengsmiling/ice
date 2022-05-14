@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.1.1](https://github.com/zhangzhengsmiling/ice/compare/v1.1.0...v1.1.1) (2022-05-14)
+
+
+### Bug Fixes
+
+* path of package.json fix ([5475c58](https://github.com/zhangzhengsmiling/ice/commit/5475c58e80b9b32a95c6807c22ce29a0059ff578))
+
 ## [1.1.0](https://github.com/zhangzhengsmiling/ice/compare/v1.0.9...v1.1.0) (2022-05-12)
 
 
