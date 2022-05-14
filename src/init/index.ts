@@ -16,10 +16,11 @@ const init = (name: string) => {
   fs.rmSync(path.resolve(cwd, `./${name}/.git`), {
     recursive: true
   });
+  const pathPkg = path.resolve(cwd, name, 'package.json')
   // 修改package.json
-  const obj = JSON.parse(fs.readFileSync('package.json').toString());
+  const obj = JSON.parse(fs.readFileSync(pathPkg).toString());
   obj.name = name;
-  fs.writeFileSync('package.json', JSON.stringify(obj, null, 2));
+  fs.writeFileSync(pathPkg, JSON.stringify(obj, null, 2));
   try {
     console.log('installing packages...(by yarn)');
     execSync(`cd ${name} && yarn`);
