@@ -18,6 +18,7 @@ import HtmlWebpackPlugin from 'html-webpack-plugin';
 import { CleanWebpackPlugin } from 'clean-webpack-plugin';
 import { SwitchCase } from '../../utils';
 const cwd = process.cwd();
+declare type FnIIFE = (...args: any) => any;
 
 type ConfigFunction =
   (config: webpack.Configuration, options: { env: unknown }) => webpack.Configuration;
@@ -178,24 +179,27 @@ const getConfig = async (ENV: EnumEnvironment) => {
 
   const { addKey, removeKey } = decoratorKeyForList('_key');
 
-  const customConfig = await import(path.resolve(process.cwd(), 'ice.config.js')).then((module) => module.default);
+  const customConfig = await import(path.resolve(process.cwd(), 'ice.config.js'))
+    .then((module) => module.default);
+
+  const iife = <RetType>(fn: FnIIFE, ...args: any[]): RetType => {
+    return fn(...args);
+  }
 
   // merge config
   let _config = null;
 
-  return SwitchCase.of()
+  return SwitchCase.of<string, webpack.Configuration>()
     .case('object', merge({}, config, customConfig))
-    .case('function', (
-      () => {
-        addKey(config.module?.rules as { [key: string]: number }[]);
-        _config = (customConfig as ConfigFunction)(
-          config,
-          { env: process.env },
-        );
-        removeKey(config.module?.rules as { [key: string]: number }[]);
-        return _config;
-      }
-    )())
+    .case('function', iife(() => {
+      addKey(config.module?.rules as { [key: string]: number }[]);
+      _config = (customConfig as ConfigFunction)(
+        config,
+        { env: process.env },
+      );
+      removeKey(config.module?.rules as { [key: string]: number }[]);
+      return _config;
+    }))
     .switch(typeof customConfig);
 };
 
