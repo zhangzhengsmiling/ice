@@ -70,7 +70,7 @@
     "release:major": "standard-version --release-as major",
     "release:alpha": "standard-version --prerelease alpha",
     "release:beta": "standard-version --prerelease beta",
-    "publish": "yarn build && npm publish --registry=https://registry.npmjs.org"
+    "publish": "yarn build && npm publish --registry=https://registry.npmjs.org --access public"
   },
   "bin": {
     "ice": "es/ice.js"
@@ -83,7 +83,7 @@
   "husky": {
     "hooks": {
       "commit-msg": "commitlint -e $GIT_PARAMS",
-      "pre-commit": "yarn lint"
+      "pre-commit": "yarn lint && git add ."
     }
   }
 }

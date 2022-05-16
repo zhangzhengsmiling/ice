@@ -184,7 +184,7 @@ const getConfig = async (ENV: EnumEnvironment) => {
 
   const iife = <RetType>(fn: FnIIFE, ...args: any[]): RetType => {
     return fn(...args);
-  }
+  };
 
   // merge config
   let _config = null;
