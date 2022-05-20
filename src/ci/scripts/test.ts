@@ -21,7 +21,7 @@ const test = async () => {
   const jestTempl = fs.readFileSync(
     path.resolve(__dirname, '../templates/jest.config.templ')
   );
-  const destJest = path.resolve(workspace, 'jest.config.ts');
+  const destJest = path.resolve(workspace, 'jest.config.js');
   const babelTempl = fs.readFileSync(
     path.resolve(__dirname, '../templates/.babelrc.templ')
   );
