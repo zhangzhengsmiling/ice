@@ -133,7 +133,7 @@ Here are some options you can pass to the command (also you can get more informa
 #### 2. ice ci --commitizen
 
 - First, it will checkout whether there is 'config' filed in your package.json.If so, it will skip too.
-- If not, it will instlall `commitizen` and `cz-conventional-changelog` and writing config of `commitizen` to your package.json.
+- If not, it will install `commitizen` and `cz-conventional-changelog` and writing config of `commitizen` to your package.json.
 - Then you can run `git cz` for testing.
 
 #### 3. ice ci --commitlint
@@ -146,6 +146,13 @@ Here are some options you can pass to the command (also you can get more informa
 - First, it will install packages, `standard-version`
 - And add script 'release: yarn standard-version' to the field 'scripts' of your packages.json.
 - If 'release' field has already been used, you can add manually.
+
+#### 5. ice ci --test
+
+- Install dependencies: `@babel/core`, `@babel/preset-env`, `@babel/preset-typescript`, `babel-jest`, `jest-environment-jsdom`, `jest`
+- Create config file for jest, `jest.config.js`
+- Create babel config file, `.babelrc.js`
+- Add script to package.json
 
 #### NOTES：
 

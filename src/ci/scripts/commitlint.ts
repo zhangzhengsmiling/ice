@@ -7,7 +7,7 @@ const commitlint = async () => {
   const workspace = process.cwd();
 
   const commitlintTempl = fs.readFileSync(
-    path.resolve(__dirname, '../templates/.commitlint.templ.js')
+    path.resolve(__dirname, '../templates/.commitlint.templ')
   ).toString();
 
   const dest = `${workspace}/.commitlintrc.js`;

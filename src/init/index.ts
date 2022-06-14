@@ -16,7 +16,7 @@ const init = (name: string) => {
   fs.rmSync(path.resolve(cwd, `./${name}/.git`), {
     recursive: true
   });
-  const pathPkg = path.resolve(cwd, name, 'package.json')
+  const pathPkg = path.resolve(cwd, name, 'package.json');
   // 修改package.json
   const obj = JSON.parse(fs.readFileSync(pathPkg).toString());
   obj.name = name;
