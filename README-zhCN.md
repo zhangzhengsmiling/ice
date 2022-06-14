@@ -138,6 +138,13 @@
 - 安装`standard-version`依赖
 - 在package.json的scripts字段里加入release脚本，如果release脚本占用了，可以手动添加脚本
 
+#### 5. ice ci --test
+
+- 安装依赖，`@babel/core`, `@babel/preset-env`, `@babel/preset-typescript`, `babel-jest`, `jest-environment-jsdom`, `jest`
+- 创建jest配置文件，`jest.config.js`
+- 创建babel配置文件，`.babelrc.js`
+- 在package.json中添加test脚本
+
 #### 注意：
 
 以上涉及修改package.json的脚本（commizen/husky/standard-version）,设计到json序列化成对象，可能会导致packages.json里面字段排序按照字典序重排。
