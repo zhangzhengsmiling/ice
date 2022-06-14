@@ -120,6 +120,8 @@ You can run eslint by script, `ice lint src --ext .tsx,.ts`.Besides you can get 
 
 - --standard-version
 
+- --test
+
 Here are some options you can pass to the command (also you can get more information by `ice ci -h`):
 
 #### 1. ice ci --husky

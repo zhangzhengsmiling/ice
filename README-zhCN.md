@@ -115,6 +115,7 @@
 - --commitizen
 - --commitlint
 - --standard-version
+- --test
 
 #### 1. ice ci --husky
 
