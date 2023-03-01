@@ -17,6 +17,7 @@ const test = async () => {
     'jest-environment-jsdom',
     'jest'
   ], ['-D']);
+  installPackages(['@types/jest'], ['-D']);
 
   const jestTempl = fs.readFileSync(
     path.resolve(__dirname, '../templates/jest.config.templ')
