@@ -58,6 +58,7 @@ const ciCommand = new Command('ci')
   .option('--commitizen')
   .option('--standard-version')
   .option('--test')
+  .option('--lint-staged')
   .action(ci);
 
 registrySubCommand(program, devCommand);

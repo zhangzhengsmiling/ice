@@ -1,5 +1,5 @@
 import { SwitchCase } from '../utils';
-import { commitlint, standardVersion, commitizen, husky, test } from './scripts';
+import { commitlint, standardVersion, commitizen, husky, test, lintStaged } from './scripts';
 const props = <T>(key: keyof T) => (obj: T) => obj[key];
 interface IOptions {
   husky: boolean;
@@ -7,6 +7,7 @@ interface IOptions {
   commitlint: boolean;
   standardVersion: boolean;
   test: boolean;
+  lintStaged: boolean;
 }
 
 const ci = (options: IOptions) => {
@@ -15,7 +16,8 @@ const ci = (options: IOptions) => {
     .case('commitlint', commitlint)
     .case('commitizen', commitizen)
     .case('standardVersion', standardVersion)
-    .case('test', test);
+    .case('test', test)
+    .case('lintStaged', lintStaged);
   const tasks = (Object.keys(options) as (keyof IOptions)[])
     .filter(props)
     .map(ciSwitchCase.switch.bind(ciSwitchCase));
